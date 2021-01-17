@@ -2,7 +2,7 @@ import "reflect-metadata"
 import { ApolloServer } from 'apollo-server-express'
 import express from "express"
 import { buildSchema } from 'type-graphql'
-import { UserResolver } from './resolvers/UserResolver'
+import { MovieResolver } from './resolvers/MovieResolver'
 import { PORT } from './utils/constants'
 
 
@@ -12,7 +12,7 @@ const initServer = async() => {
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [
-                UserResolver
+                MovieResolver
             ],
             validate: false
         })
