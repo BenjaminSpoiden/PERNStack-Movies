@@ -1,4 +1,11 @@
 export const PORT = 4000
 export const API_KEY = "ff76c4704a6ecd35ed0a1d176e30d92b"
 export const IMAGE_PATH = "https://image.tmdb.org/t/p/w500"
-export const POPULAR_MOVIE_PATH = "https://api.themoviedb.org/3/movie/popular"
+export const BASE_PATH = "https://api.themoviedb.org/3"
+export const GENRE_URL = `${BASE_PATH}/genre/movie/list`
+export const POPULAR_MOVIE_URL = `${BASE_PATH}/movie/popular`
+export const TOP_RATED_MOVIES_URL = `${BASE_PATH}/movie/top_rated`
+export const UPCOMING_MOVIE_URL = `${BASE_PATH}/movie/upcoming`
+export const LATEST_MOVIE_URL = `${BASE_PATH}/movie/latest`
+export const NOW_PLAYING_URL = `${BASE_PATH}/movie/now_playing`
+export const DISCOVER_MOVIE_URL = `${BASE_PATH}/discover/movie`

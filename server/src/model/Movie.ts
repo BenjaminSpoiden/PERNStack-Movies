@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from "type-graphql";
+import { Genres } from "./Genres";
 
 @ObjectType()
 export class Movie {
@@ -9,18 +10,21 @@ export class Movie {
     @Field(() => Boolean)
     adult: boolean
 
-    @Field(() => String)
+    @Field()
     original_title: string
 
-    @Field(() => String)
+    @Field()
     overview: string
 
-    @Field(() => String)
+    @Field(() => [Genres])
+    genres: Genres[]
+
+    @Field()
     release_date: string
 
-    @Field(() => String)
+    @Field()
     vote_average: string
 
-    @Field(() => String)
+    @Field()
     vote_count: string
 }
