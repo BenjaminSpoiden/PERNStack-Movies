@@ -1,55 +1,36 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from '@chakra-ui/react'
-import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
-
-import { Hero } from '../components/Hero'
+import { Flex, SimpleGrid } from "@chakra-ui/react"
+import React from "react"
 import { Container } from '../components/Container'
-import { Main } from '../components/Main'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
-import { CTA } from '../components/CTA'
-import { Footer } from '../components/Footer'
+import { LaptopWrapper } from "../components/LaptopWrapper"
+import { MovieDisplay } from "../components/MovieDisplay"
+import { NavBar } from "../components/NavBar"
+
 
 const Index = () => (
-  <Container height="100vh">
-    <Hero />
-    <Main>
-      <Text>
-        Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{' '}
-        <Code>typescript</Code>.
-      </Text>
-
-      <List spacing={3} my={0}>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
-          >
-            Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-            Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
-    </Main>
-
-    <DarkModeSwitch />
-    <Footer>
-      <Text>Next ❤️ Chakra</Text>
-    </Footer>
-    <CTA />
+  <Container minH="100vh">
+    <NavBar />
+    <LaptopWrapper>
+      <Flex mt="100px" maxW='1280px' >
+        <SimpleGrid columns={[1, 2, 3]} gap={8} >
+        {
+          Array(20)
+          .fill("")
+          .map((_, i) => (
+            <MovieDisplay 
+              key={i} 
+              flexDir="column"
+              bgColor="#111111" 
+              borderBottomColor="orange.400" 
+              borderBottomWidth="1px" 
+              borderBottomStyle="solid" 
+              borderRadius="lg"
+              overflow="hidden"
+            />
+          ))
+        }
+        </SimpleGrid>
+      </Flex>
+    </LaptopWrapper>
   </Container>
 )
 

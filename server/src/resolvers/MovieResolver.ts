@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Movie } from "../model/Movie";
 import { MovieDetail } from "../model/MovieDetail"
-import { API_KEY, DETAIL_MOVIE_URL, DISCOVER_MOVIE_URL, GENRE_URL, IMAGE_PATH } from "../utils/constants";
+import { API_KEY, DETAIL_MOVIE_URL, DISCOVER_MOVIE_URL, GENRE_URL, IMAGE_PATH, SEARCH_MOVIE_URL } from "../utils/constants";
 import { Arg, Field, Int, ObjectType, Query, Resolver } from "type-graphql";
 import { MovieError } from "../error/MovieErrors";
 import { randomPrice } from "../utils/randomPrice";
@@ -49,12 +49,15 @@ export class MovieResolver {
             }
         })
 
+        
         const moviesFinal = Promise.all([movies, genres]).then(response => {
             const movies = response[0].data.results as any[]
             const genres = response[1].data.genres as any[]
 
 
             const finalResult = movies.map(movie => {
+
+
                 const movieGenre = movie.genre_ids.map((genre_id: any) => {
                     let genre = genres.filter(genre => genre.id === genre_id)
                     return genre[0]
@@ -65,7 +68,8 @@ export class MovieResolver {
                     poster: `${IMAGE_PATH}${movie.poster_path}`,
                     genres: movieGenre,
                     wishList: false,
-                    price: randomPrice(1000)
+                    price: randomPrice(1000),
+                    
                 }
                 
                 const data = {
@@ -76,7 +80,6 @@ export class MovieResolver {
                 return data as Movie
                 
             })
-            console.log(finalResult[0].price)
             
             return finalResult
         })
@@ -133,5 +136,63 @@ export class MovieResolver {
         })
 
         return data.genres as Genres[]
+    }
+
+    @Query(() => [Movie])
+    async searchMovies(
+        @Arg('query') query: string,
+        @Arg('page', () => Int) page: number
+    ): Promise<Movie[]> {
+
+        const searchMovies = axios.get(SEARCH_MOVIE_URL, {
+            params:{
+                api_key: API_KEY,
+                language: 'en-US',
+                page,
+                query,
+                include_adult: false
+            }
+        })
+
+        const genres = axios.get(GENRE_URL, {
+            params: {
+                api_key: API_KEY,
+                language: 'en-US'
+            }
+        })
+
+        const moviesFinal = Promise.all([searchMovies, genres]).then(response => {
+            const movies = response[0].data.results as any[]
+            const genres = response[1].data.genres as any[]
+
+
+            const finalResult = movies.map(movie => {
+                const movieGenre = movie.genre_ids.map((genre_id: any) => {
+                    let genre = genres.filter(genre => genre.id === genre_id)
+                    return genre[0]
+                })
+
+            
+                const addedMovieData = {
+                    poster: `${IMAGE_PATH}${movie.poster_path}`,
+                    genres: movieGenre,
+                    wishList: false,
+                    price: randomPrice(1000)
+                }
+                
+                const data = {
+                    ...movie,
+                    ...addedMovieData
+                }
+                
+                return data as Movie
+                
+            })
+            console.log(finalResult[0].price)
+            
+            return finalResult
+        })
+
+        return await moviesFinal
     }
 }
