@@ -1,26 +1,49 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { randomPrice } from "../utils/randomPrice";
+import { Field, Float, Int, ObjectType } from "type-graphql";
+import { Genres } from "./Genres";
+import { MovieInterface } from "./MovieInterface";
 
 @ObjectType()
-export class Movie {
-
+export class Movie implements MovieInterface {
+    
     @Field(() => Int)
     id: number
 
     @Field(() => Boolean)
     adult: boolean
 
-    @Field(() => String)
+    @Field()
     original_title: string
 
-    @Field(() => String)
-    overview: string
 
-    @Field(() => String)
+    @Field(() => String, {nullable: true})
+    poster?: string
+
+    @Field(() => [Genres])
+    genres: Genres[]
+
+    @Field()
     release_date: string
 
-    @Field(() => String)
-    vote_average: string
+    @Field(() => Float)
+    vote_average: number
 
-    @Field(() => String)
-    vote_count: string
+    @Field(() => Int)
+    vote_count: number
+
+    @Field(() => Boolean)
+    wishList: boolean;
+
+    @Field(() => Int)
+    price: number
+
+
+    getPrice() {
+        return randomPrice(1000)
+    }
+
+    getWishList() {
+        return false
+    }
+
 }
