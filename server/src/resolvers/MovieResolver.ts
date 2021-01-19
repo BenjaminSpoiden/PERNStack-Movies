@@ -3,7 +3,7 @@ import { Movie } from "../model/movie/Movie";
 import { MovieDetail } from "../model/movie/MovieDetail"
 import { API_KEY, CAST_URL, DETAIL_MOVIE_URL, DISCOVER_MOVIE_URL, GENRE_URL, IMAGE_PATH, SEARCH_MOVIE_URL, TRENDING_MOVIE_URL } from "../utils/constants";
 import { Arg, Field, Int, ObjectType, Query, Resolver } from "type-graphql";
-import { MovieError } from "../error/MovieErrors";
+import { GenericError } from "../error/GenericError";
 import { Genres } from "../model/movie/Genres";
 import { genericMoviePromise } from "../utils/GenericPromises";
 import { MovieCast } from "../model/movie/MovieCast";
@@ -22,8 +22,8 @@ class MoviesReponse {
     @Field(() => PaginatedMovies, {nullable: true})
     movieResponse?: PaginatedMovies
 
-    @Field(() => MovieError, {nullable: true})
-    error?: MovieError
+    @Field(() => GenericError, {nullable: true})
+    error?: GenericError
 }
 
 @Resolver()
@@ -64,7 +64,7 @@ export class MovieResolver {
         }catch(error) {
             return {
                 error: {
-                    name: error.name,
+                    field: error.name,
                     message: error.message
                 }
             }
@@ -125,7 +125,7 @@ export class MovieResolver {
         }catch(error) {
             return {
                 error: {
-                    name: error.name,
+                    field: error.name,
                     message: error.message
                 }
             }
