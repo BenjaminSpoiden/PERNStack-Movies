@@ -1,11 +1,12 @@
 import axios from "axios";
-import { Movie } from "../model/Movie";
-import { MovieDetail } from "../model/MovieDetail"
-import { API_KEY, DETAIL_MOVIE_URL, DISCOVER_MOVIE_URL, GENRE_URL, IMAGE_PATH, SEARCH_MOVIE_URL } from "../utils/constants";
+import { Movie } from "../model/movie/Movie";
+import { MovieDetail } from "../model/movie/MovieDetail"
+import { API_KEY, CAST_URL, DETAIL_MOVIE_URL, DISCOVER_MOVIE_URL, GENRE_URL, IMAGE_PATH, SEARCH_MOVIE_URL, TRENDING_MOVIE_URL } from "../utils/constants";
 import { Arg, Field, Int, ObjectType, Query, Resolver } from "type-graphql";
 import { MovieError } from "../error/MovieErrors";
-import { randomPrice } from "../utils/randomPrice";
-import { Genres } from "../model/Genres";
+import { Genres } from "../model/movie/Genres";
+import { genericMoviePromise } from "../utils/GenericPromises";
+import { MovieCast } from "../model/movie/MovieCast";
 
 @ObjectType()
 class PaginatedMovies {
@@ -30,14 +31,16 @@ export class MovieResolver {
 
     @Query(() => MoviesReponse)
     async fetchMovies(
-        @Arg("page", () => Int) page: number
+        @Arg("page", () => Int) page: number,
+        @Arg("with_genres", () => Int, {nullable: true}) with_genres?: number
     ): Promise<MoviesReponse> {
 
-        const movies = axios.get(DISCOVER_MOVIE_URL, {
+        const moviesResponse = axios.get(DISCOVER_MOVIE_URL, {
             params: {
-                sort_by: "vote_count.desc",
+                sort_by: "popularity.desc",
                 api_key: API_KEY,
                 language: 'en-US',
+                with_genres,
                 page
             }
         })
@@ -49,44 +52,9 @@ export class MovieResolver {
             }
         })
 
-        
-        const moviesFinal = Promise.all([movies, genres]).then(response => {
-            const movies = response[0].data.results as any[]
-            const genres = response[1].data.genres as any[]
-
-
-            const finalResult = movies.map(movie => {
-
-
-                const movieGenre = movie.genre_ids.map((genre_id: any) => {
-                    let genre = genres.filter(genre => genre.id === genre_id)
-                    return genre[0]
-                })
-
-            
-                const addedMovieData = {
-                    poster: `${IMAGE_PATH}${movie.poster_path}`,
-                    genres: movieGenre,
-                    wishList: false,
-                    price: randomPrice(1000),
-                    
-                }
-                
-                const data = {
-                    ...movie,
-                    ...addedMovieData
-                }
-                
-                return data as Movie
-                
-            })
-            
-            return finalResult
-        })
-        
 
         try {
-            const movies = await moviesFinal
+            const movies = await genericMoviePromise(moviesResponse, genres)
             return {
                 movieResponse: {
                     movies,
@@ -126,6 +94,44 @@ export class MovieResolver {
         return newData as Movie
     }
 
+    @Query(() => MoviesReponse)
+    async fetchTrendingMovies(
+        @Arg('page', () => Int) page: number
+    ): Promise<MoviesReponse> {
+        const trendingMovies = axios.get(TRENDING_MOVIE_URL, {
+            params: {
+                api_key: API_KEY,
+                sort_by: "popularity.desc",
+                language: 'en-US',
+                page
+            }
+        })
+
+        const genres = axios.get(GENRE_URL, {
+            params: {
+                api_key: API_KEY,
+                language: 'en-US'
+            }
+        })
+
+        try {
+            const movies = await genericMoviePromise(trendingMovies, genres)
+            return {
+                movieResponse: {
+                    movies,
+                    page
+                }
+            }
+        }catch(error) {
+            return {
+                error: {
+                    name: error.name,
+                    message: error.message
+                }
+            }
+        }
+    }
+
     @Query(() => [Genres])
     async fetchGenre() {
         const {data} = await axios.get(GENRE_URL, {
@@ -161,38 +167,20 @@ export class MovieResolver {
             }
         })
 
-        const moviesFinal = Promise.all([searchMovies, genres]).then(response => {
-            const movies = response[0].data.results as any[]
-            const genres = response[1].data.genres as any[]
+        return await genericMoviePromise(searchMovies, genres)
+    }
 
-
-            const finalResult = movies.map(movie => {
-                const movieGenre = movie.genre_ids.map((genre_id: any) => {
-                    let genre = genres.filter(genre => genre.id === genre_id)
-                    return genre[0]
-                })
-
-            
-                const addedMovieData = {
-                    poster: `${IMAGE_PATH}${movie.poster_path}`,
-                    genres: movieGenre,
-                    wishList: false,
-                    price: randomPrice(1000)
-                }
-                
-                const data = {
-                    ...movie,
-                    ...addedMovieData
-                }
-                
-                return data as Movie
-                
-            })
-            console.log(finalResult[0].price)
-            
-            return finalResult
+    @Query(() => [MovieCast])
+    async fetchCast(
+        @Arg('movie_id', () => Int) movie_id: number
+    ) {
+        const {data} = await axios.get(CAST_URL + `/${movie_id}/credits`, {
+            params: {
+                api_key: API_KEY,
+                language: 'en-US'
+            }
         })
 
-        return await moviesFinal
+        return data.cast as MovieCast[]
     }
 }
