@@ -10,3 +10,4 @@ export const LATEST_MOVIE_URL = `${BASE_PATH}/movie/latest`
 export const NOW_PLAYING_URL = `${BASE_PATH}/movie/now_playing`
 export const DISCOVER_MOVIE_URL = `${BASE_PATH}/discover/movie`
 export const DETAIL_MOVIE_URL = `${BASE_PATH}/movie`
+export const SEARCH_MOVIE_URL = `${BASE_PATH}/search/movie`

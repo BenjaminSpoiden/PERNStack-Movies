@@ -15,6 +15,11 @@ export class Movie implements MovieInterface {
     @Field()
     original_title: string
 
+    @Field()
+    overview: string
+
+    @Field(() => Float)
+    popularity: number
 
     @Field(() => String, {nullable: true})
     poster?: string

@@ -24,8 +24,5 @@ export class MovieDetail extends Movie {
     homepage: string
 
     @Field(() => Int)
-    runtime: number
-
-    @Field(() => Int)
     budget: number
 }
