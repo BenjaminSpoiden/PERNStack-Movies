@@ -11,3 +11,7 @@ export const NOW_PLAYING_URL = `${BASE_PATH}/movie/now_playing`
 export const DISCOVER_MOVIE_URL = `${BASE_PATH}/discover/movie`
 export const DETAIL_MOVIE_URL = `${BASE_PATH}/movie`
 export const SEARCH_MOVIE_URL = `${BASE_PATH}/search/movie`
+export const TRENDING_MOVIE_URL = `${BASE_PATH}/trending/movie/day`
+export const CAST_URL = `${BASE_PATH}/movie`
+
+export const PROD = process.env.NODE_ENV === "production"

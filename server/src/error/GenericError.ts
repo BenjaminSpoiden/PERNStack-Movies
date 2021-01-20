@@ -1,9 +1,10 @@
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
-export class MovieError {
+export class GenericError {
+    
     @Field()
-    name: string
+    field: string
 
     @Field()
     message: string
