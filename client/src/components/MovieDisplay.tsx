@@ -6,9 +6,9 @@ import {MdFavorite, MdFavoriteBorder, MdPlayCircleFilled} from "react-icons/md"
 
 export const MovieDisplay = (props: FlexProps) => {
 
-    const formatter = new Intl.NumberFormat('en-US', {
+    const formatter = new Intl.NumberFormat('en-BE', {
         style: "currency",
-        currency: "USD",
+        currency: "EUR",
         
     }) 
 
