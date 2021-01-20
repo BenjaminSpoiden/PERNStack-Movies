@@ -176,7 +176,7 @@ export type MutationCreateUserArgs = {
 
 export type MutationLoginUserArgs = {
   password: Scalars['String'];
-  usernameOrEmail: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -231,7 +231,7 @@ export type DeleteUserMutation = (
 );
 
 export type LoginUserMutationVariables = Exact<{
-  usernameOrEmail: Scalars['String'];
+  username: Scalars['String'];
   password: Scalars['String'];
 }>;
 
@@ -372,8 +372,8 @@ export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutati
 export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
 export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
 export const LoginUserDocument = gql`
-    mutation LoginUser($usernameOrEmail: String!, $password: String!) {
-  loginUser(usernameOrEmail: $usernameOrEmail, password: $password) {
+    mutation LoginUser($username: String!, $password: String!) {
+  loginUser(username: $username, password: $password) {
     errors {
       field
       message
@@ -399,7 +399,7 @@ export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, Log
  * @example
  * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
  *   variables: {
- *      usernameOrEmail: // value for 'usernameOrEmail'
+ *      username: // value for 'username'
  *      password: // value for 'password'
  *   },
  * });

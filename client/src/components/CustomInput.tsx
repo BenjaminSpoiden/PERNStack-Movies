@@ -18,13 +18,13 @@ export const CustomInput: React.FC<FormControlProps & InputData & InputProps & I
     const showFeedback = (!!didFocus && field.value?.trim()?.length > 2) || meta.touched
 
     return (
-        <FormControl py={4} isInvalid={didFocus && !!meta.error} {...props} >
+        <FormControl py={4} isInvalid={didFocus && !!meta.error} {...props} onFocus={handleFocus} >
             <FormLabel htmlFor={props.name} >
                 <Text textTransform="capitalize"> {props.name} </Text>
             </FormLabel>
             <InputGroup id={props.name} >
                 <InputLeftElement pointerEvents="none" children={props.icon} />
-                <Input {...props} {...field} id={props.name} placeholder={props.placeholder} type={props.type} onFocus={handleFocus} />
+                <Input {...props} {...field} id={props.name} placeholder={props.placeholder} type={props.type} />
             </InputGroup>
             
             { showFeedback ? <FormErrorMessage> {meta.error ? meta.error : null} </FormErrorMessage> : <FormHelperText>{props.helpertext}</FormHelperText>}

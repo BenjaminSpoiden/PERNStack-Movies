@@ -8,10 +8,13 @@ import { FiMail } from "react-icons/fi"
 import { Form, Formik } from "formik"
 import { sleep } from "../utils/sleep"
 import { ValidationSchema } from "../utils/ValidationSchema"
+import { useCreateUserMutation } from "../generated/graphql"
+import { toErrorMap } from "../utils/toErrorMap"
 
 const Register = () => {
 
     const router = useRouter()
+    const [createUserMutation] = useCreateUserMutation()
 
     return (
         <Container minH="100vh">
@@ -25,9 +28,21 @@ const Register = () => {
                             email: "",
                             password: ""
                         }}
-                        onSubmit={async (values) => {
-                            await sleep(1000)
-                            console.log(values)
+                        onSubmit={async (values, {setErrors}) => {
+                            const response = createUserMutation({
+                                variables: {
+                                    input: values
+                                }
+                            })
+
+                            return response 
+                                .then(result => {
+                                    if(result.data?.createUser.errors) {
+                                        setErrors(toErrorMap(result.data.createUser.errors))
+                                    }else if(result.data?.createUser.user) {
+                                        console.log(result.data.createUser.user)
+                                    }
+                                })
                         }}
                         validationSchema={ValidationSchema}
                     >

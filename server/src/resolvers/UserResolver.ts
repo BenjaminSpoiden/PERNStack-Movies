@@ -38,7 +38,7 @@ export class UserResolver {
 
     @Mutation(() => UserResponse)
     async createUser(
-        @Arg('userInput', () => UserInput) userInput: UserInput,
+        @Arg('userInput') userInput: UserInput,
         @Ctx() {req}: MyContext
     ): Promise<UserResponse> {
 
@@ -82,7 +82,7 @@ export class UserResolver {
         const hashedPassword = await argon2.hash(userInput.password)
 
         const user = await User.create({
-                username: userInput.username.toLowerCase(),
+                username: userInput.username.toLocaleLowerCase(),
                 password: hashedPassword,
                 email: userInput.email
             }).save()
@@ -98,19 +98,19 @@ export class UserResolver {
 
     @Mutation(() => UserResponse)
     async loginUser(
-        @Arg('usernameOrEmail') usernameOrEmail: string,
+        @Arg('username') username: string,
         @Arg("password") password: string,
         @Ctx() {req}: MyContext
     ): Promise<UserResponse> {
-        const user = await User.findOne(usernameOrEmail.includes('@') 
-            ? {where: {email: usernameOrEmail}}
-            : {where: {username: usernameOrEmail.toLowerCase()}}
+        const user = await User.findOne(username.includes('@') 
+            ? {where: {email: username}}
+            : {where: {username: username.toLocaleLowerCase()}}
         )
 
         if(!user) {
             return {
                 errors: [{
-                    field: "usernameOrEmail",
+                    field: "username",
                     message: "The user doesn't exist."
                 }]
             }

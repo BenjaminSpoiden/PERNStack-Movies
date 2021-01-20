@@ -1557,7 +1557,7 @@
                 "defaultValue": null
               },
               {
-                "name": "usernameOrEmail",
+                "name": "username",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",

@@ -6,12 +6,13 @@ import { Container } from "../components/Container"
 import { CredentialBox } from "../components/CredentialBox"
 import { CustomInput } from "../components/CustomInput"
 import { Form, Formik } from "formik"
-import { sleep } from "../utils/sleep"
+import { useLoginUserMutation } from "../generated/graphql"
+import { toErrorMap } from "../utils/toErrorMap"
 
 const Login = () => {
     const router = useRouter()
 
-   
+    const [loginUserMutation] = useLoginUserMutation()
 
     return (
         <Container minH="100vh">
@@ -24,13 +25,22 @@ const Login = () => {
                             username: "",
                             password: ""
                         }}
-                        onSubmit={async (values) => {
-                            await sleep(1000)
-                            console.log(values)
+                        onSubmit={async (values, {setErrors}) => {
+                            const response = loginUserMutation({
+                                variables: values
+                            })
+                            return response
+                                .then(result => {
+                                    if(result.data?.loginUser.errors) {
+                                        setErrors(toErrorMap(result.data.loginUser.errors))
+                                    }else if(result.data?.loginUser.user) {
+                                        console.log(result.data.loginUser.user)
+                                    }
+                                })
+                                .catch(e => console.log("Something when wrong: ", e.message)) 
                         }}
-                        
                     >
-                        {({isSubmitting, isValid, handleBlur, handleChange}) => (
+                        {({isSubmitting, values, handleBlur, handleChange}) => (
                             <Form>
                                 <CustomInput 
                                     name="username"
@@ -39,7 +49,7 @@ const Login = () => {
                                     icon={<BiUser />}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    
+                                    value={values.username}
                                 />
                                 
                                 <CustomInput
@@ -49,8 +59,9 @@ const Login = () => {
                                     icon={<BiLock />}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    value={values.password}
                                 />
-                                <Button d="flex" m="auto" w="100%" disabled={!isValid} colorScheme="orange" my={4} type="submit" isLoading={isSubmitting} >
+                                <Button d="flex" m="auto" w="100%" colorScheme="orange" my={4} type="submit" isLoading={isSubmitting} >
                                     Login
                                 </Button>
                             </Form>
