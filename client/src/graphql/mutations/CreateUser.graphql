@@ -1,0 +1,11 @@
+mutation CreateUser($input: UserInput!) {
+  createUser(userInput: $input) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...UserFragment
+    }
+  }
+}
