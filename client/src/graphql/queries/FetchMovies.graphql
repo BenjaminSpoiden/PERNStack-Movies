@@ -1,0 +1,5 @@
+query FetchMovies($page: Int!) {
+  fetchMovies(page: $page) {
+    ...MovieFragment
+  }
+}

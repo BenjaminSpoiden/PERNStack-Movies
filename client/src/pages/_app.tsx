@@ -2,7 +2,7 @@ import { ApolloProvider } from "@apollo/client"
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from '../theme'
 import { AppProps } from 'next/app'
-import { client } from "../utils/client"
+import { client } from "../apollo/client"
 
 
 function MyApp({ Component, pageProps }: AppProps) {

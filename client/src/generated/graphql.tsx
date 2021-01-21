@@ -15,7 +15,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  fetchMovies: MoviesReponse;
+  fetchMovies: Array<Movie>;
   fetchMovieDetail: MovieDetail;
   fetchTrendingMovies: MoviesReponse;
   fetchGenre: Array<Genres>;
@@ -58,18 +58,6 @@ export type QueryFetchUserArgs = {
   id: Scalars['Int'];
 };
 
-export type MoviesReponse = {
-  __typename?: 'MoviesReponse';
-  movieResponse?: Maybe<PaginatedMovies>;
-  error?: Maybe<GenericError>;
-};
-
-export type PaginatedMovies = {
-  __typename?: 'PaginatedMovies';
-  page: Scalars['Int'];
-  movies: Array<Movie>;
-};
-
 export type Movie = AbstractMovieClass & {
   __typename?: 'Movie';
   id: Scalars['Int'];
@@ -107,12 +95,6 @@ export type Genres = {
   name: Scalars['String'];
 };
 
-export type GenericError = {
-  __typename?: 'GenericError';
-  field: Scalars['String'];
-  message: Scalars['String'];
-};
-
 export type MovieDetail = AbstractMovieClass & {
   __typename?: 'MovieDetail';
   id: Scalars['Int'];
@@ -140,6 +122,24 @@ export type ProductionCompany = {
   id: Scalars['Int'];
   logo_path: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type MoviesReponse = {
+  __typename?: 'MoviesReponse';
+  movieResponse?: Maybe<PaginatedMovies>;
+  error?: Maybe<GenericError>;
+};
+
+export type PaginatedMovies = {
+  __typename?: 'PaginatedMovies';
+  page: Scalars['Int'];
+  movies: Array<Movie>;
+};
+
+export type GenericError = {
+  __typename?: 'GenericError';
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type MovieCast = {
@@ -195,6 +195,15 @@ export type UserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
+
+export type MovieFragmentFragment = (
+  { __typename?: 'Movie' }
+  & Pick<Movie, 'id' | 'wishList' | 'popularity' | 'price' | 'overview' | 'adult' | 'original_title' | 'poster' | 'release_date' | 'vote_average' | 'vote_count'>
+  & { genres: Array<(
+    { __typename?: 'Genres' }
+    & Pick<Genres, 'id' | 'name'>
+  )> }
+);
 
 export type UserFragmentFragment = (
   { __typename?: 'User' }
@@ -258,6 +267,19 @@ export type LogoutUserMutation = (
   & Pick<Mutation, 'logoutUser'>
 );
 
+export type FetchMoviesQueryVariables = Exact<{
+  page: Scalars['Int'];
+}>;
+
+
+export type FetchMoviesQuery = (
+  { __typename?: 'Query' }
+  & { fetchMovies: Array<(
+    { __typename?: 'Movie' }
+    & MovieFragmentFragment
+  )> }
+);
+
 export type FetchUserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -293,6 +315,25 @@ export type MeQuery = (
   )> }
 );
 
+export const MovieFragmentFragmentDoc = gql`
+    fragment MovieFragment on Movie {
+  id
+  wishList
+  popularity
+  price
+  overview
+  adult
+  original_title
+  poster
+  genres {
+    id
+    name
+  }
+  release_date
+  vote_average
+  vote_count
+}
+    `;
 export const UserFragmentFragmentDoc = gql`
     fragment UserFragment on User {
   id
@@ -439,6 +480,39 @@ export function useLogoutUserMutation(baseOptions?: Apollo.MutationHookOptions<L
 export type LogoutUserMutationHookResult = ReturnType<typeof useLogoutUserMutation>;
 export type LogoutUserMutationResult = Apollo.MutationResult<LogoutUserMutation>;
 export type LogoutUserMutationOptions = Apollo.BaseMutationOptions<LogoutUserMutation, LogoutUserMutationVariables>;
+export const FetchMoviesDocument = gql`
+    query FetchMovies($page: Int!) {
+  fetchMovies(page: $page) {
+    ...MovieFragment
+  }
+}
+    ${MovieFragmentFragmentDoc}`;
+
+/**
+ * __useFetchMoviesQuery__
+ *
+ * To run a query within a React component, call `useFetchMoviesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMoviesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchMoviesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *   },
+ * });
+ */
+export function useFetchMoviesQuery(baseOptions: Apollo.QueryHookOptions<FetchMoviesQuery, FetchMoviesQueryVariables>) {
+        return Apollo.useQuery<FetchMoviesQuery, FetchMoviesQueryVariables>(FetchMoviesDocument, baseOptions);
+      }
+export function useFetchMoviesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMoviesQuery, FetchMoviesQueryVariables>) {
+          return Apollo.useLazyQuery<FetchMoviesQuery, FetchMoviesQueryVariables>(FetchMoviesDocument, baseOptions);
+        }
+export type FetchMoviesQueryHookResult = ReturnType<typeof useFetchMoviesQuery>;
+export type FetchMoviesLazyQueryHookResult = ReturnType<typeof useFetchMoviesLazyQuery>;
+export type FetchMoviesQueryResult = Apollo.QueryResult<FetchMoviesQuery, FetchMoviesQueryVariables>;
 export const FetchUserDocument = gql`
     query FetchUser($id: Int!) {
   fetchUser(id: $id) {

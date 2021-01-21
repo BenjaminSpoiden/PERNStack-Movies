@@ -6,9 +6,8 @@ import { CustomInput } from "../components/CustomInput"
 import { BiLock, BiUser } from "react-icons/bi"
 import { FiMail } from "react-icons/fi"
 import { Form, Formik } from "formik"
-import { sleep } from "../utils/sleep"
 import { ValidationSchema } from "../utils/ValidationSchema"
-import { useCreateUserMutation } from "../generated/graphql"
+import { MeDocument, MeQuery, useCreateUserMutation } from "../generated/graphql"
 import { toErrorMap } from "../utils/toErrorMap"
 
 const Register = () => {
@@ -32,6 +31,15 @@ const Register = () => {
                             const response = createUserMutation({
                                 variables: {
                                     input: values
+                                },
+                                update: (cache, {data}) => {
+                                    cache.writeQuery<MeQuery>({
+                                        query: MeDocument,
+                                        data: {
+                                            __typename: "Query",
+                                            me: data?.createUser.user
+                                        }
+                                    })
                                 }
                             })
 
@@ -40,7 +48,7 @@ const Register = () => {
                                     if(result.data?.createUser.errors) {
                                         setErrors(toErrorMap(result.data.createUser.errors))
                                     }else if(result.data?.createUser.user) {
-                                        console.log(result.data.createUser.user)
+                                        router.push("/")
                                     }
                                 })
                         }}

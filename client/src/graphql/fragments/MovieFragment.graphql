@@ -1,0 +1,17 @@
+fragment MovieFragment on Movie {
+  id
+  wishList
+  popularity
+  price
+  overview
+  adult
+  original_title
+  poster
+  genres {
+    id
+    name
+  }
+  release_date
+  vote_average
+  vote_count
+}

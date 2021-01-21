@@ -29,11 +29,11 @@ class MoviesReponse {
 @Resolver()
 export class MovieResolver {
 
-    @Query(() => MoviesReponse)
+    @Query(() => [Movie])
     async fetchMovies(
         @Arg("page", () => Int) page: number,
         @Arg("with_genres", () => Int, {nullable: true}) with_genres?: number
-    ): Promise<MoviesReponse> {
+    ) {
 
         const moviesResponse = axios.get(DISCOVER_MOVIE_URL, {
             params: {
@@ -55,19 +55,9 @@ export class MovieResolver {
 
         try {
             const movies = await genericMoviePromise(moviesResponse, genres)
-            return {
-                movieResponse: {
-                    movies,
-                    page
-                }
-            }
+            return movies
         }catch(error) {
-            return {
-                error: {
-                    field: error.name,
-                    message: error.message
-                }
-            }
+            return null
         }
     }
 

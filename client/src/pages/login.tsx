@@ -6,7 +6,7 @@ import { Container } from "../components/Container"
 import { CredentialBox } from "../components/CredentialBox"
 import { CustomInput } from "../components/CustomInput"
 import { Form, Formik } from "formik"
-import { useLoginUserMutation } from "../generated/graphql"
+import { MeDocument, MeQuery, useLoginUserMutation } from "../generated/graphql"
 import { toErrorMap } from "../utils/toErrorMap"
 
 const Login = () => {
@@ -27,14 +27,23 @@ const Login = () => {
                         }}
                         onSubmit={async (values, {setErrors}) => {
                             const response = loginUserMutation({
-                                variables: values
+                                variables: values,
+                                update: (cache, {data}) => {
+                                    cache.writeQuery<MeQuery>({
+                                        query: MeDocument,
+                                        data: {
+                                            __typename: "Query",
+                                            me: data?.loginUser.user
+                                        }
+                                    })
+                                }
                             })
                             return response
                                 .then(result => {
                                     if(result.data?.loginUser.errors) {
                                         setErrors(toErrorMap(result.data.loginUser.errors))
                                     }else if(result.data?.loginUser.user) {
-                                        console.log(result.data.loginUser.user)
+                                        router.push("/")
                                     }
                                 })
                                 .catch(e => console.log("Something when wrong: ", e.message)) 
