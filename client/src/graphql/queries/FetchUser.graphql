@@ -1,0 +1,5 @@
+query FetchUser($id: Int!) {
+  fetchUser(id: $id) {
+    ...UserFragment
+  }
+}

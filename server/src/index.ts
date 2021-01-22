@@ -23,6 +23,8 @@ const initServer = async() => {
 
     await createConnection()
 
+    
+
     app.use(cors({
         origin: process.env.CLIENT_HOST,
         credentials: true

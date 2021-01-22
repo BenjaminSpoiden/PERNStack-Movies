@@ -21,7 +21,7 @@ export const genericMoviePromise = (movies: Promise<AxiosResponse<any>>, genres:
                 poster: `${IMAGE_PATH}${movie.poster_path}`,
                 genres: movieGenre,
                 wishList: false,
-                price: randomPrice(1000)
+                price: randomPrice(100)
             }
             
             const data = {
