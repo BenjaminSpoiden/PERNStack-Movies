@@ -1,0 +1,6 @@
+query FetchGenre {
+  fetchGenre {
+    id
+    name
+  }
+}

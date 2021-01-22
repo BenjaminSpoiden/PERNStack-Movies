@@ -32,7 +32,7 @@ export class MovieResolver {
     @Query(() => [Movie])
     async fetchMovies(
         @Arg("page", () => Int) page: number,
-        @Arg("with_genres", () => Int, {nullable: true}) with_genres?: number
+        @Arg("with_genres", () => String, {nullable: true}) with_genres?: string
     ) {
 
         const moviesResponse = axios.get(DISCOVER_MOVIE_URL, {

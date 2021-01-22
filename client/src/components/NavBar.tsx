@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth"
 import { FiLogOut } from "react-icons/fi"
 import { MeDocument, MeQuery, useLogoutUserMutation } from "../generated/graphql"
 import { SettingsIcon } from "@chakra-ui/icons"
+import { BiCart } from "react-icons/bi"
 
 export const NavBar = () => {
 
@@ -20,7 +21,7 @@ export const NavBar = () => {
             bgColor="gray.900" 
             minH="100px"
             boxShadow="none"
-            zIndex={1}
+            zIndex={999}
             align="center"
         >
             <Flex p={4} maxW='1280px' align="center" justify="space-between" w="100%" m="auto">
@@ -37,6 +38,12 @@ export const NavBar = () => {
                                 fontSize="20px"
                                 colorScheme="gray"
                                 children={<SettingsIcon />}
+                            />
+                            <IconButton
+                                aria-label="cart"
+                                fontSize="28px"
+                                colorScheme="orange"
+                                children={<BiCart />}
                             />
                             <IconButton 
                                 aria-label="sign-out" 

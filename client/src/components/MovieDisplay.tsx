@@ -1,10 +1,16 @@
-import { StarIcon, TimeIcon } from "@chakra-ui/icons"
-import { Flex, Text, FlexProps, Heading, Image, Icon, IconButton, Button, Center} from "@chakra-ui/react"
+import { CalendarIcon, StarIcon } from "@chakra-ui/icons"
+import { Flex, Text, Heading, Image, Icon, IconButton, Button } from "@chakra-ui/react"
 import React, { useState } from "react"
 import {MdFavorite, MdFavoriteBorder, MdPlayCircleFilled} from "react-icons/md"
+import { Movie } from "../generated/graphql"
+import { useAuth } from "../hooks/useAuth"
+
+interface MovieData {
+    movieData: Movie
+}
 
 
-export const MovieDisplay = (props: FlexProps) => {
+export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
 
     const formatter = new Intl.NumberFormat('en-BE', {
         style: "currency",
@@ -12,19 +18,21 @@ export const MovieDisplay = (props: FlexProps) => {
         
     }) 
 
-    const [fav, setFav] = useState(false)
+    const [fav, setFav] = useState(movieData.wishList)
 
+    const {me} = useAuth()
 
     return (
-        <Flex {...props} minH="640px">
-            <Image src="https://picsum.photos/400/300"/>
+        <Flex flexDir={["column", "row", "row"]} boxShadow="lg" borderRadius="lg" overflow="hidden" >
+            <Image src={movieData.poster || ""}/>
             <Flex flexDir="column" m={4}>
                 <Flex align="center" justify="space-between">
-                    <Heading size="md">Movie title</Heading>
+                    <Heading size="md">{movieData.original_title}</Heading>
                     <IconButton
                         onClick={() => {
                             setFav(c => !c)
                         }}
+                        disabled={!me}
                         color="red.600"
                         variant="ghost"
                         aria-label="fav"
@@ -34,14 +42,19 @@ export const MovieDisplay = (props: FlexProps) => {
                 </Flex>
                 <Flex align="center" justify="space-between">
                     <Flex align="center" >
-                        <Icon as={TimeIcon} w={3} h={3} color="gray.600" />
-                        <Text fontSize="sm" color="gray.600" ml={1} >151 Min</Text>
+                        <Icon as={CalendarIcon} w={3} h={3} color="gray.600" />
+                        <Text fontSize="sm" color="gray.600" ml={1} >{movieData.release_date}</Text>
                     </Flex>
                     <Flex align="center" my={2} >
-                        <Text fontSize="sm" color="gray.600" ml={1}>Horror / Sci-Fi / Fantasy / War</Text>
+                        {movieData.genres.map(genre => (
+                            <Text fontSize="sm" color="gray.600" ml={1}>
+                                {genre.name} /
+                            </Text>
+                        ))}
+                       
                     </Flex>
                 </Flex>
-                <Text textAlign="justify" > Temporibus eos pariatur impedit, nesciunt doloribus commodi inventore a, iure at unde iste dolore nihil quam voluptatibus eaque repellendus ea eum laudantium!</Text>
+                <Text textAlign="justify" >{movieData.overview}</Text>
                 
                 <Flex my={2} align="center" justify="space-between" >
                     <Flex flexDir="column" >
@@ -51,16 +64,16 @@ export const MovieDisplay = (props: FlexProps) => {
                                 .fill("")
                                 .map((_, i) => (
                                 <StarIcon
-                                    key={i}
-                                    color={i < 8 ? "yellow.500" : "gray.300"}
+                                    key={i * 2}
+                                    color={i < movieData.vote_average ? "yellow.500" : "gray.300"}
                                 />
                             ))}
                         </Flex>
-                        <Text fontSize="sm" color="gray.600" >28151 votes</Text>
+                        <Text fontSize="sm" color="gray.600" >{movieData.vote_count} votes</Text>
                     </Flex>
                     <Flex flexDir="column" align="center" >
                         <Text fontSize="sm" color="gray.600">Price:</Text>
-                        <Text mt={-1} > {formatter.format(7423 / 1000)} </Text>
+                        <Text mt={-1} > {formatter.format(movieData.price / 10)} </Text>
                     </Flex>
                 </Flex>
                     <Flex mt={2} >
