@@ -12,7 +12,13 @@ import { toErrorMap } from "../utils/toErrorMap"
 const Login = () => {
     const router = useRouter()
 
-    const [loginUserMutation] = useLoginUserMutation()
+    const [loginUserMutation] = useLoginUserMutation({
+        onCompleted: () => {
+            router.push("/")
+        },
+        onError: (err) => console.log(err),
+        
+    })
 
     return (
         <Container minH="100vh">
@@ -37,13 +43,12 @@ const Login = () => {
                                         }
                                     })
                                 }
+                            
                             })
                             return response
                                 .then(result => {
                                     if(result.data?.loginUser.errors) {
                                         setErrors(toErrorMap(result.data.loginUser.errors))
-                                    }else if(result.data?.loginUser.user) {
-                                        router.push("/")
                                     }
                                 })
                                 .catch(e => console.log("Something when wrong: ", e.message)) 

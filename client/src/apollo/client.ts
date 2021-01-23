@@ -1,9 +1,11 @@
-import { ApolloClient } from '@apollo/client'
+import { ApolloClient, HttpLink } from '@apollo/client'
 import { cache } from './cache'
 
 export const client = new ApolloClient({
-    uri: "http://localhost:4000/graphql",
-    credentials: "include",
+    link: new HttpLink({
+        uri: "http://localhost:4000/graphql",
+        credentials: "include"
+    }),
     cache,
-    ssrMode: true
+    ssrMode: typeof window === undefined
 })
