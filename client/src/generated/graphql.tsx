@@ -31,7 +31,8 @@ export type QueryFetchMovieArgs = {
 
 
 export type QueryFetchMoviesArgs = {
-  offset?: Maybe<Scalars['Int']>;
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -207,7 +208,8 @@ export type FetchMovieQuery = (
 );
 
 export type FetchMoviesQueryVariables = Exact<{
-  offset: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 }>;
 
 
@@ -459,8 +461,8 @@ export type FetchMovieQueryHookResult = ReturnType<typeof useFetchMovieQuery>;
 export type FetchMovieLazyQueryHookResult = ReturnType<typeof useFetchMovieLazyQuery>;
 export type FetchMovieQueryResult = Apollo.QueryResult<FetchMovieQuery, FetchMovieQueryVariables>;
 export const FetchMoviesDocument = gql`
-    query FetchMovies($offset: Int!) {
-  fetchMovies(offset: $offset) {
+    query FetchMovies($cursor: String, $limit: Int!) {
+  fetchMovies(cursor: $cursor, limit: $limit) {
     hasMore
     movies {
       ...MovieFragment
@@ -481,7 +483,8 @@ export const FetchMoviesDocument = gql`
  * @example
  * const { data, loading, error } = useFetchMoviesQuery({
  *   variables: {
- *      offset: // value for 'offset'
+ *      cursor: // value for 'cursor'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

@@ -25,7 +25,7 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
     return (
         <Flex flexDir={["column", "row", "row"]} boxShadow="lg" borderRadius="lg" overflow="hidden" >
             <Image src={movieData.poster || ""}/>
-            <Flex flexDir="column" m={4}>
+            <Flex flexDir="column" m={4} w="100%" >
                 <Flex align="center" justify="space-between">
                     <Heading size="md">{movieData.original_title}</Heading>
                     <IconButton

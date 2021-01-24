@@ -7,5 +7,5 @@ export const client = new ApolloClient({
         credentials: "include"
     }),
     cache,
-    ssrMode: typeof window === undefined
+    ssrMode: true
 })

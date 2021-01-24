@@ -32,20 +32,23 @@ export class MovieResolver {
 
     @Query(() => PaginatedMovies)
     async fetchMovies(
-        @Arg("offset", () => Int, { nullable: true, defaultValue: 0 }) offset: number
+        @Arg("limit", () => Int) limit: number,
+        @Arg("cursor", () => String, {nullable: true}) cursor: string | null
     ): Promise<PaginatedMovies> {
 
-        const limit = Math.min(50, 10)
+        const threshold = Math.min(50, limit)
+        const overhead = threshold + 1
 
         const moviesQuery = await getConnection().query(`
             SELECT * FROM movie
+            ${cursor ? `WHERE movie.release_date < '${cursor}'` : ``}
             ORDER BY movie.release_date DESC
-            LIMIT 11
-            OFFSET ${offset};
+            LIMIT ${overhead};
         `) as Movie[]
+
         return {
-            movies: moviesQuery.slice(0, 10),
-            hasMore: moviesQuery.length === limit + 1
+            movies: moviesQuery.slice(0, threshold),
+            hasMore: moviesQuery.length === overhead
         }
     }
 }
