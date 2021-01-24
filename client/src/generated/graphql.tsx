@@ -11,46 +11,27 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
   __typename?: 'Query';
-  fetchMovies: Array<Movie>;
-  fetchMovieDetail: MovieDetail;
-  fetchTrendingMovies: MoviesReponse;
-  fetchGenre: Array<Genres>;
-  searchMovies: Array<Movie>;
-  fetchCast: Array<MovieCast>;
+  fetchMovie?: Maybe<Movie>;
+  fetchMovies: PaginatedMovies;
   fetchUsers: Array<User>;
   fetchUser: User;
   me?: Maybe<User>;
 };
 
 
+export type QueryFetchMovieArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryFetchMoviesArgs = {
-  with_genres?: Maybe<Scalars['String']>;
-  page: Scalars['Int'];
-};
-
-
-export type QueryFetchMovieDetailArgs = {
-  movie_id: Scalars['Int'];
-};
-
-
-export type QueryFetchTrendingMoviesArgs = {
-  page: Scalars['Int'];
-};
-
-
-export type QuerySearchMoviesArgs = {
-  page: Scalars['Int'];
-  query: Scalars['String'];
-};
-
-
-export type QueryFetchCastArgs = {
-  movie_id: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
 };
 
 
@@ -58,35 +39,22 @@ export type QueryFetchUserArgs = {
   id: Scalars['Int'];
 };
 
-export type Movie = AbstractMovieClass & {
+export type Movie = {
   __typename?: 'Movie';
   id: Scalars['Int'];
+  wish_list: Scalars['Boolean'];
+  popularity?: Maybe<Scalars['Float']>;
+  price: Scalars['Int'];
+  overview?: Maybe<Scalars['String']>;
   adult: Scalars['Boolean'];
-  original_title: Scalars['String'];
-  overview: Scalars['String'];
-  popularity: Scalars['Float'];
+  original_title?: Maybe<Scalars['String']>;
   poster?: Maybe<Scalars['String']>;
   genres: Array<Genres>;
-  release_date: Scalars['String'];
-  vote_average: Scalars['Float'];
-  vote_count: Scalars['Int'];
-  price: Scalars['Float'];
-  wishList: Scalars['Boolean'];
-};
-
-export type AbstractMovieClass = {
-  id: Scalars['Int'];
-  adult: Scalars['Boolean'];
-  original_title: Scalars['String'];
-  overview: Scalars['String'];
-  popularity: Scalars['Float'];
-  poster?: Maybe<Scalars['String']>;
-  genres: Array<Genres>;
-  release_date: Scalars['String'];
-  vote_average: Scalars['Float'];
-  vote_count: Scalars['Int'];
-  price: Scalars['Float'];
-  wishList: Scalars['Boolean'];
+  release_date?: Maybe<Scalars['String']>;
+  vote_average?: Maybe<Scalars['Float']>;
+  vote_count?: Maybe<Scalars['Int']>;
+  created_at: Scalars['String'];
+  updated_at: Scalars['DateTime'];
 };
 
 export type Genres = {
@@ -95,59 +63,11 @@ export type Genres = {
   name: Scalars['String'];
 };
 
-export type MovieDetail = AbstractMovieClass & {
-  __typename?: 'MovieDetail';
-  id: Scalars['Int'];
-  adult: Scalars['Boolean'];
-  original_title: Scalars['String'];
-  overview: Scalars['String'];
-  popularity: Scalars['Float'];
-  poster?: Maybe<Scalars['String']>;
-  genres: Array<Genres>;
-  release_date: Scalars['String'];
-  vote_average: Scalars['Float'];
-  vote_count: Scalars['Int'];
-  price: Scalars['Float'];
-  wishList: Scalars['Boolean'];
-  runtime: Scalars['Int'];
-  status: Scalars['String'];
-  revenue: Scalars['Int'];
-  production_companies: Array<ProductionCompany>;
-  homepage: Scalars['String'];
-  budget: Scalars['Int'];
-};
-
-export type ProductionCompany = {
-  __typename?: 'ProductionCompany';
-  id: Scalars['Int'];
-  logo_path: Scalars['String'];
-  name: Scalars['String'];
-};
-
-export type MoviesReponse = {
-  __typename?: 'MoviesReponse';
-  movieResponse?: Maybe<PaginatedMovies>;
-  error?: Maybe<GenericError>;
-};
 
 export type PaginatedMovies = {
   __typename?: 'PaginatedMovies';
-  page: Scalars['Int'];
   movies: Array<Movie>;
-};
-
-export type GenericError = {
-  __typename?: 'GenericError';
-  field: Scalars['String'];
-  message: Scalars['String'];
-};
-
-export type MovieCast = {
-  __typename?: 'MovieCast';
-  id: Scalars['Int'];
-  adult: Scalars['Boolean'];
-  name: Scalars['String'];
-  gender: Scalars['Int'];
+  hasMore: Scalars['Boolean'];
 };
 
 export type User = {
@@ -190,6 +110,12 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type GenericError = {
+  __typename?: 'GenericError';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type UserInput = {
   username: Scalars['String'];
   email: Scalars['String'];
@@ -198,7 +124,7 @@ export type UserInput = {
 
 export type MovieFragmentFragment = (
   { __typename?: 'Movie' }
-  & Pick<Movie, 'id' | 'wishList' | 'popularity' | 'price' | 'overview' | 'adult' | 'original_title' | 'poster' | 'release_date' | 'vote_average' | 'vote_count'>
+  & Pick<Movie, 'id' | 'wish_list' | 'popularity' | 'price' | 'overview' | 'adult' | 'original_title' | 'poster' | 'release_date' | 'vote_count' | 'vote_average' | 'created_at' | 'updated_at'>
   & { genres: Array<(
     { __typename?: 'Genres' }
     & Pick<Genres, 'id' | 'name'>
@@ -267,29 +193,34 @@ export type LogoutUserMutation = (
   & Pick<Mutation, 'logoutUser'>
 );
 
-export type FetchGenreQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchMovieQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
 
 
-export type FetchGenreQuery = (
+export type FetchMovieQuery = (
   { __typename?: 'Query' }
-  & { fetchGenre: Array<(
-    { __typename?: 'Genres' }
-    & Pick<Genres, 'id' | 'name'>
+  & { fetchMovie?: Maybe<(
+    { __typename?: 'Movie' }
+    & MovieFragmentFragment
   )> }
 );
 
 export type FetchMoviesQueryVariables = Exact<{
-  page: Scalars['Int'];
-  with_genres?: Maybe<Scalars['String']>;
+  offset: Scalars['Int'];
 }>;
 
 
 export type FetchMoviesQuery = (
   { __typename?: 'Query' }
-  & { fetchMovies: Array<(
-    { __typename?: 'Movie' }
-    & MovieFragmentFragment
-  )> }
+  & { fetchMovies: (
+    { __typename?: 'PaginatedMovies' }
+    & Pick<PaginatedMovies, 'hasMore'>
+    & { movies: Array<(
+      { __typename?: 'Movie' }
+      & MovieFragmentFragment
+    )> }
+  ) }
 );
 
 export type FetchUserQueryVariables = Exact<{
@@ -327,28 +258,10 @@ export type MeQuery = (
   )> }
 );
 
-export type SearchMoviesQueryVariables = Exact<{
-  page: Scalars['Int'];
-  query: Scalars['String'];
-}>;
-
-
-export type SearchMoviesQuery = (
-  { __typename?: 'Query' }
-  & { searchMovies: Array<(
-    { __typename?: 'Movie' }
-    & Pick<Movie, 'id' | 'wishList' | 'price' | 'overview' | 'adult' | 'original_title' | 'poster' | 'release_date' | 'vote_average' | 'vote_count'>
-    & { genres: Array<(
-      { __typename?: 'Genres' }
-      & Pick<Genres, 'id' | 'name'>
-    )> }
-  )> }
-);
-
 export const MovieFragmentFragmentDoc = gql`
     fragment MovieFragment on Movie {
   id
-  wishList
+  wish_list
   popularity
   price
   overview
@@ -360,8 +273,10 @@ export const MovieFragmentFragmentDoc = gql`
     name
   }
   release_date
-  vote_average
   vote_count
+  vote_average
+  created_at
+  updated_at
 }
     `;
 export const UserFragmentFragmentDoc = gql`
@@ -510,43 +425,46 @@ export function useLogoutUserMutation(baseOptions?: Apollo.MutationHookOptions<L
 export type LogoutUserMutationHookResult = ReturnType<typeof useLogoutUserMutation>;
 export type LogoutUserMutationResult = Apollo.MutationResult<LogoutUserMutation>;
 export type LogoutUserMutationOptions = Apollo.BaseMutationOptions<LogoutUserMutation, LogoutUserMutationVariables>;
-export const FetchGenreDocument = gql`
-    query FetchGenre {
-  fetchGenre {
-    id
-    name
+export const FetchMovieDocument = gql`
+    query FetchMovie($id: Int!) {
+  fetchMovie(id: $id) {
+    ...MovieFragment
   }
 }
-    `;
+    ${MovieFragmentFragmentDoc}`;
 
 /**
- * __useFetchGenreQuery__
+ * __useFetchMovieQuery__
  *
- * To run a query within a React component, call `useFetchGenreQuery` and pass it any options that fit your needs.
- * When your component renders, `useFetchGenreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFetchMovieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchMovieQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFetchGenreQuery({
+ * const { data, loading, error } = useFetchMovieQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useFetchGenreQuery(baseOptions?: Apollo.QueryHookOptions<FetchGenreQuery, FetchGenreQueryVariables>) {
-        return Apollo.useQuery<FetchGenreQuery, FetchGenreQueryVariables>(FetchGenreDocument, baseOptions);
+export function useFetchMovieQuery(baseOptions: Apollo.QueryHookOptions<FetchMovieQuery, FetchMovieQueryVariables>) {
+        return Apollo.useQuery<FetchMovieQuery, FetchMovieQueryVariables>(FetchMovieDocument, baseOptions);
       }
-export function useFetchGenreLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchGenreQuery, FetchGenreQueryVariables>) {
-          return Apollo.useLazyQuery<FetchGenreQuery, FetchGenreQueryVariables>(FetchGenreDocument, baseOptions);
+export function useFetchMovieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchMovieQuery, FetchMovieQueryVariables>) {
+          return Apollo.useLazyQuery<FetchMovieQuery, FetchMovieQueryVariables>(FetchMovieDocument, baseOptions);
         }
-export type FetchGenreQueryHookResult = ReturnType<typeof useFetchGenreQuery>;
-export type FetchGenreLazyQueryHookResult = ReturnType<typeof useFetchGenreLazyQuery>;
-export type FetchGenreQueryResult = Apollo.QueryResult<FetchGenreQuery, FetchGenreQueryVariables>;
+export type FetchMovieQueryHookResult = ReturnType<typeof useFetchMovieQuery>;
+export type FetchMovieLazyQueryHookResult = ReturnType<typeof useFetchMovieLazyQuery>;
+export type FetchMovieQueryResult = Apollo.QueryResult<FetchMovieQuery, FetchMovieQueryVariables>;
 export const FetchMoviesDocument = gql`
-    query FetchMovies($page: Int!, $with_genres: String) {
-  fetchMovies(page: $page, with_genres: $with_genres) {
-    ...MovieFragment
+    query FetchMovies($offset: Int!) {
+  fetchMovies(offset: $offset) {
+    hasMore
+    movies {
+      ...MovieFragment
+    }
   }
 }
     ${MovieFragmentFragmentDoc}`;
@@ -563,8 +481,7 @@ export const FetchMoviesDocument = gql`
  * @example
  * const { data, loading, error } = useFetchMoviesQuery({
  *   variables: {
- *      page: // value for 'page'
- *      with_genres: // value for 'with_genres'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
@@ -674,50 +591,3 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
-export const SearchMoviesDocument = gql`
-    query SearchMovies($page: Int!, $query: String!) {
-  searchMovies(page: $page, query: $query) {
-    id
-    wishList
-    price
-    overview
-    adult
-    original_title
-    poster
-    genres {
-      id
-      name
-    }
-    release_date
-    vote_average
-    vote_count
-  }
-}
-    `;
-
-/**
- * __useSearchMoviesQuery__
- *
- * To run a query within a React component, call `useSearchMoviesQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchMoviesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchMoviesQuery({
- *   variables: {
- *      page: // value for 'page'
- *      query: // value for 'query'
- *   },
- * });
- */
-export function useSearchMoviesQuery(baseOptions: Apollo.QueryHookOptions<SearchMoviesQuery, SearchMoviesQueryVariables>) {
-        return Apollo.useQuery<SearchMoviesQuery, SearchMoviesQueryVariables>(SearchMoviesDocument, baseOptions);
-      }
-export function useSearchMoviesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchMoviesQuery, SearchMoviesQueryVariables>) {
-          return Apollo.useLazyQuery<SearchMoviesQuery, SearchMoviesQueryVariables>(SearchMoviesDocument, baseOptions);
-        }
-export type SearchMoviesQueryHookResult = ReturnType<typeof useSearchMoviesQuery>;
-export type SearchMoviesLazyQueryHookResult = ReturnType<typeof useSearchMoviesLazyQuery>;
-export type SearchMoviesQueryResult = Apollo.QueryResult<SearchMoviesQuery, SearchMoviesQueryVariables>;

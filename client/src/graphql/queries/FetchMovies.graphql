@@ -1,5 +1,8 @@
-query FetchMovies($page: Int!, $with_genres: String) {
-  fetchMovies(page: $page, with_genres: $with_genres) {
-    ...MovieFragment
+query FetchMovies($offset: Int!) {
+  fetchMovies(offset: $offset) {
+    hasMore
+    movies {
+      ...MovieFragment
+    }
   }
 }

@@ -9,16 +9,12 @@ interface MoviesProps {
   }
 }
 
-export const Movies = memo(({selectedGenres}: MoviesProps) => {
+export const Movies = memo(() => {
 
-    const [currentPage, setCurrentPage] = useState(2)
-
-    console.log(selectedGenres.genres.toString())
 
     const {data, fetchMore} = useFetchMoviesQuery({
         variables: {
-            page: 1,
-            with_genres: selectedGenres.genres.toString()
+            offset: 10
         },
         fetchPolicy: "cache-and-network"
     })
@@ -26,8 +22,7 @@ export const Movies = memo(({selectedGenres}: MoviesProps) => {
     const onFetchMore = async () => {
         await fetchMore({
             variables: {
-               page: currentPage,
-               with_genres: selectedGenres
+               offset: 10
             }
         })
     }
@@ -36,20 +31,15 @@ export const Movies = memo(({selectedGenres}: MoviesProps) => {
         <>
             <Button 
                 m='auto'
-                disabled={data?.fetchMovies.length ? data.fetchMovies.length < 20 : true} 
                 mb={4} 
-                colorScheme="orange" 
-                onClick={async () => {
-                  setCurrentPage(c => c + 1)
-                  await onFetchMore()
-                }}
+                colorScheme="orange"
               >
                 Load more
               </Button>
               <SimpleGrid columns={[1]} gap={8} >
                 {
                   data
-                    ? data.fetchMovies.map(movie => (
+                    ? data.fetchMovies.movies.map(movie => (
                       <MovieDisplay
                         key={movie.id}
                         movieData={movie}

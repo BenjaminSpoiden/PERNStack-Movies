@@ -1,6 +1,6 @@
 fragment MovieFragment on Movie {
   id
-  wishList
+  wish_list
   popularity
   price
   overview
@@ -12,6 +12,8 @@ fragment MovieFragment on Movie {
     name
   }
   release_date
-  vote_average
   vote_count
+  vote_average
+  created_at
+  updated_at
 }

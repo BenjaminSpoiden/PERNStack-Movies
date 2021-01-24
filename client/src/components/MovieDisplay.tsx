@@ -1,5 +1,5 @@
 import { CalendarIcon, StarIcon } from "@chakra-ui/icons"
-import { Flex, Text, Heading, Image, Icon, IconButton, Button } from "@chakra-ui/react"
+import { Flex, Text, Heading, Image, Icon, IconButton, Button, Wrap, WrapItem } from "@chakra-ui/react"
 import React, { useState } from "react"
 import {MdFavorite, MdFavoriteBorder, MdPlayCircleFilled} from "react-icons/md"
 import { Movie } from "../generated/graphql"
@@ -18,7 +18,7 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
         
     }) 
 
-    const [fav, setFav] = useState(movieData.wishList)
+    const [fav, setFav] = useState(movieData.wish_list)
 
     const {me} = useAuth()
 
@@ -40,19 +40,19 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                         icon={ fav ? <MdFavorite /> : <MdFavoriteBorder />}
                     />
                 </Flex>
-                <Flex align="center" justify="space-between">
+                <Flex flexDir={['column', 'column', 'row']} align={["flex-start", "flex-start", "center"]} justify="space-between">
                     <Flex align="center" >
                         <Icon as={CalendarIcon} w={3} h={3} color="gray.600" />
                         <Text fontSize="sm" color="gray.600" ml={1} >{movieData.release_date}</Text>
                     </Flex>
-                    <Flex align="center" my={2} >
+                    <Wrap d="flex" align="center" my={2} >
                         {movieData.genres.map(genre => (
-                            <Text fontSize="sm" color="gray.600" ml={1}>
-                                {genre.name} /
-                            </Text>
+                            <WrapItem>
+                                <Text fontSize="sm" color="gray.600">{genre.name} /</Text>
+                            </WrapItem>
                         ))}
                        
-                    </Flex>
+                    </Wrap>
                 </Flex>
                 <Text textAlign="justify" >{movieData.overview}</Text>
                 
@@ -65,7 +65,7 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                                 .map((_, i) => (
                                 <StarIcon
                                     key={i * 2}
-                                    color={i < movieData.vote_average ? "yellow.500" : "gray.300"}
+                                    color={i < movieData.vote_average! ? "yellow.500" : "gray.300"}
                                 />
                             ))}
                         </Flex>
@@ -76,9 +76,6 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                         <Text mt={-1} > {formatter.format(movieData.price / 10)} </Text>
                     </Flex>
                 </Flex>
-                    <Flex mt={2} >
-                        <Button colorScheme="red" leftIcon={<MdPlayCircleFilled />} >Watch Trailer</Button>
-                    </Flex>
             </Flex>
         </Flex>
     )
