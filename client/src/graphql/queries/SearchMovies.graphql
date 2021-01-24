@@ -1,0 +1,18 @@
+query SearchMovies($page: Int!, $query: String!) {
+  searchMovies(page: $page, query: $query) {
+    id
+    wishList
+    price
+    overview
+    adult
+    original_title
+    poster
+    genres {
+      id
+      name
+    }
+    release_date
+    vote_average
+    vote_count
+  }
+}

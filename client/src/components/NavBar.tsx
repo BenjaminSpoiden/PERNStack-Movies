@@ -28,7 +28,6 @@ export const NavBar = () => {
                 <Text>
                     Some App Name
                 </Text>
-                <SearchInput maxW="560px" variant="filled" pr={4} />
                 {me && !loading
                     ? 
                         <HStack>
