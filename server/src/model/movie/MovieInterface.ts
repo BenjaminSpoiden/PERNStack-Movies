@@ -24,8 +24,8 @@ export abstract class AbstractMovieClass {
     @Field(() => [Genres])
     genres: Genres[]
 
-    @Field()
-    release_date: string
+    @Field({nullable: true})
+    release_date?: string
 
     @Field(() => Float)
     vote_average: number

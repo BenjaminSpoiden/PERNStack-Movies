@@ -20,7 +20,7 @@ const Index = () => {
   const [searchInput, setSearchInput] = useState("")
 
   const debouncedSearchTerm = useDebounce(searchInput, 400)
-
+  
 
   const {data: genreData} = useFetchGenreQuery()
   const [searchMovies, {data: searchData}] = useSearchMoviesLazyQuery()
