@@ -12,8 +12,10 @@ import cors from "cors"
 import session from "express-session"
 import Redis from "ioredis"
 import connectRedis from "connect-redis"
-import { MyContext } from "./context/MyContext"
-
+// import { MyContext } from "./context/MyContext"
+import { MovieGenreResolver } from "./resolvers/MovieGenreResolver"
+// import { MyContext } from "./context/MyContext"
+import { createGenreLoader } from "./utils/MovieLoader"
 
 const initServer = async() => {
 
@@ -52,13 +54,15 @@ const initServer = async() => {
         schema: await buildSchema({
             resolvers: [
                 MovieResolver,
-                UserResolver
+                UserResolver,
+                MovieGenreResolver
             ],
             validate: false
         }),
-        context: ({req, res}: MyContext) => ({
+        context: ({req, res}: any) => ({
             req,
-            res
+            res,
+            genreLoader: createGenreLoader()
         })
     })
 

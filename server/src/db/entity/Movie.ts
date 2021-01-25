@@ -1,6 +1,8 @@
-import { Genres } from "../../model/movie/Genres";
-import { Field, Float, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { MyContext } from "src/context/MyContext";
+import { Ctx, Field, Float, Int, ObjectType } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Genre } from "./Genre";
+import { MovieGenre } from "./MovieGenre";
 
 
 @ObjectType()
@@ -27,6 +29,10 @@ export class Movie extends BaseEntity {
     @Field(() => String, {nullable: true})
     overview: string
 
+
+    @OneToMany(() => MovieGenre, mg => mg.genre)
+    genreConnection: Promise<MovieGenre[]>
+
     @Column()
     @Field(() => Boolean)
     adult: boolean
@@ -38,10 +44,6 @@ export class Movie extends BaseEntity {
     @Column({nullable: true})
     @Field(() => String, {nullable: true})
     poster: string
-
-    @Column({type: "json"})
-    @Field(() => [Genres])
-    genres: Genres[]
 
     @Column({nullable: true})
     @Field(() => String, {nullable: true})
@@ -62,4 +64,12 @@ export class Movie extends BaseEntity {
     @UpdateDateColumn()
     @Field()
     updated_at: Date
+
+    @Field(() => [Genre])
+    async genres(
+        @Ctx() {genreLoader}: MyContext
+    ) {
+        return genreLoader.load(this.id)
+    }
+
 }

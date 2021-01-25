@@ -19,6 +19,7 @@ export type Query = {
   __typename?: 'Query';
   fetchMovie?: Maybe<Movie>;
   fetchMovies: PaginatedMovies;
+  fetchGenres: Array<Genres>;
   fetchUsers: Array<User>;
   fetchUser: User;
   me?: Maybe<User>;
@@ -31,7 +32,8 @@ export type QueryFetchMovieArgs = {
 
 
 export type QueryFetchMoviesArgs = {
-  offset?: Maybe<Scalars['Int']>;
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -193,6 +195,17 @@ export type LogoutUserMutation = (
   & Pick<Mutation, 'logoutUser'>
 );
 
+export type FetchGenresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchGenresQuery = (
+  { __typename?: 'Query' }
+  & { fetchGenres: Array<(
+    { __typename?: 'Genres' }
+    & Pick<Genres, 'id' | 'name'>
+  )> }
+);
+
 export type FetchMovieQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -207,7 +220,8 @@ export type FetchMovieQuery = (
 );
 
 export type FetchMoviesQueryVariables = Exact<{
-  offset: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 }>;
 
 
@@ -425,6 +439,39 @@ export function useLogoutUserMutation(baseOptions?: Apollo.MutationHookOptions<L
 export type LogoutUserMutationHookResult = ReturnType<typeof useLogoutUserMutation>;
 export type LogoutUserMutationResult = Apollo.MutationResult<LogoutUserMutation>;
 export type LogoutUserMutationOptions = Apollo.BaseMutationOptions<LogoutUserMutation, LogoutUserMutationVariables>;
+export const FetchGenresDocument = gql`
+    query FetchGenres {
+  fetchGenres {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFetchGenresQuery__
+ *
+ * To run a query within a React component, call `useFetchGenresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchGenresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchGenresQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchGenresQuery(baseOptions?: Apollo.QueryHookOptions<FetchGenresQuery, FetchGenresQueryVariables>) {
+        return Apollo.useQuery<FetchGenresQuery, FetchGenresQueryVariables>(FetchGenresDocument, baseOptions);
+      }
+export function useFetchGenresLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchGenresQuery, FetchGenresQueryVariables>) {
+          return Apollo.useLazyQuery<FetchGenresQuery, FetchGenresQueryVariables>(FetchGenresDocument, baseOptions);
+        }
+export type FetchGenresQueryHookResult = ReturnType<typeof useFetchGenresQuery>;
+export type FetchGenresLazyQueryHookResult = ReturnType<typeof useFetchGenresLazyQuery>;
+export type FetchGenresQueryResult = Apollo.QueryResult<FetchGenresQuery, FetchGenresQueryVariables>;
 export const FetchMovieDocument = gql`
     query FetchMovie($id: Int!) {
   fetchMovie(id: $id) {
@@ -459,8 +506,8 @@ export type FetchMovieQueryHookResult = ReturnType<typeof useFetchMovieQuery>;
 export type FetchMovieLazyQueryHookResult = ReturnType<typeof useFetchMovieLazyQuery>;
 export type FetchMovieQueryResult = Apollo.QueryResult<FetchMovieQuery, FetchMovieQueryVariables>;
 export const FetchMoviesDocument = gql`
-    query FetchMovies($offset: Int!) {
-  fetchMovies(offset: $offset) {
+    query FetchMovies($cursor: String, $limit: Int!) {
+  fetchMovies(cursor: $cursor, limit: $limit) {
     hasMore
     movies {
       ...MovieFragment
@@ -481,7 +528,8 @@ export const FetchMoviesDocument = gql`
  * @example
  * const { data, loading, error } = useFetchMoviesQuery({
  *   variables: {
- *      offset: // value for 'offset'
+ *      cursor: // value for 'cursor'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

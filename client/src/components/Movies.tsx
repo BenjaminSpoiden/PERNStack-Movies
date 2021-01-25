@@ -1,53 +1,69 @@
-import { Button, SimpleGrid } from "@chakra-ui/react"
+import { Button, Flex, SimpleGrid } from "@chakra-ui/react"
 import React, { memo, useState } from "react"
 import { useFetchMoviesQuery } from "../generated/graphql"
 import { MovieDisplay } from "./MovieDisplay"
 
 interface MoviesProps {
   selectedGenres: {
-    genres: string[]
+    genres: number[]
   }
 }
 
-export const Movies = memo(() => {
+export const Movies = ({selectedGenres}: MoviesProps) => {
 
+    const [paginateLoading, setPaginateLoading] = useState(false)
 
-    const {data, fetchMore} = useFetchMoviesQuery({
-        variables: {
-            offset: 10
-        },
-        fetchPolicy: "cache-and-network"
+    const {data, fetchMore, variables} = useFetchMoviesQuery({
+      variables: {
+        cursor: null, 
+        limit: 10
+      }
     })
+
+    console.log(selectedGenres)
+
    
     const onFetchMore = async () => {
-        await fetchMore({
-            variables: {
-               offset: 10
-            }
-        })
+      setPaginateLoading(true)
+      
+      await fetchMore({
+        variables: {
+          cursor: data?.fetchMovies.movies[data.fetchMovies.movies.length - 1].release_date,
+          limit: variables?.limit
+        }
+      })
+
+      setPaginateLoading(false)
     }
+
+    console.log(data)
 
     return (
         <>
+          <Flex flexDir="column" >
+            <SimpleGrid columns={[1]} gap={8} >
+              {
+                data
+                  ? data.fetchMovies.movies.map(movie => (
+                    <MovieDisplay
+                      key={movie.id}
+                      movieData={movie}
+                    />
+                  ))
+                  : "No data"
+              }
+            </SimpleGrid>
             <Button 
-                m='auto'
-                mb={4} 
-                colorScheme="orange"
-              >
-                Load more
-              </Button>
-              <SimpleGrid columns={[1]} gap={8} >
-                {
-                  data
-                    ? data.fetchMovies.movies.map(movie => (
-                      <MovieDisplay
-                        key={movie.id}
-                        movieData={movie}
-                      />
-                    ))
-                    : "No data"
-                }
-              </SimpleGrid>
+              w='100%'
+              disabled={!data?.fetchMovies.hasMore}
+              isLoading={paginateLoading}
+              my={4} 
+              colorScheme="orange"
+              onClick={async () => await onFetchMore()}
+            >
+              Load more
+            </Button>
+          </Flex>
         </>
     )
-})
+}

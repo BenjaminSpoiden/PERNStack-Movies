@@ -1,35 +1,37 @@
-import { Flex, Grid, GridItem} from "@chakra-ui/react"
+import { Checkbox, Flex, Grid, GridItem, VStack} from "@chakra-ui/react"
 import React, { useState } from "react"
 import { Container } from '../components/Container'
 import { LaptopWrapper } from "../components/LaptopWrapper"
 import { Movies } from "../components/Movies"
 import { NavBar } from "../components/NavBar"
 import { SearchInput } from "../components/SearchInput"
+import { useFetchGenresQuery } from "../generated/graphql"
 
 
 type StateInit = {
-  genres: string[]
+  genres: number[]
 }
 
 const Index = () => {
   
   
-  // const [selectedGenres, setSelectGenres] = useState<StateInit>({
-  //   genres: []
-  // })
+  const [selectedGenres, setSelectGenres] = useState<StateInit>({
+    genres: []
+  })
   
+  const {data: genreData} = useFetchGenresQuery()
 
-  // const updateChanges = (e: React.ChangeEvent<HTMLInputElement>, genreId: string) => {
-  //   if(e.target.checked) {
-  //     setSelectGenres({
-  //       genres: selectedGenres?.genres.concat(genreId)
-  //     })
-  //   }else {
-  //     setSelectGenres({
-  //       genres: selectedGenres?.genres.filter(val => val !== genreId)
-  //     })
-  //   }
-  // }
+  const updateChanges = (e: React.ChangeEvent<HTMLInputElement>, genreId: number) => {
+    if(e.target.checked) {
+      setSelectGenres({
+        genres: selectedGenres?.genres.concat(genreId)
+      })
+    }else {
+      setSelectGenres({
+        genres: selectedGenres?.genres.filter(val => val !== genreId)
+      })
+    }
+  }
 
   return (
     <Container minH="100vh">
@@ -40,10 +42,17 @@ const Index = () => {
             <GridItem d={['none', 'none', "flex"]} w="100%" >
               <Flex flexDir="column" align="flex-start" justify="flex-start" >
                <SearchInput />
+               <VStack my={4} display="flex" alignItems="flex-start" justifyContent="flex-start" >
+                 {genreData?.fetchGenres.map(genre => (
+                  <Checkbox key={genre.id} onChange={(e) => {
+                    updateChanges(e, genre.id)
+                  }} name="checkbox" size="lg" colorScheme="orange" textColor="gray.600" >{genre.name}</Checkbox>
+                 ))}
+               </VStack>
               </Flex>
             </GridItem>
             <GridItem >
-              <Movies />
+              <Movies selectedGenres={selectedGenres} />
             </GridItem>
           </Grid>
         </Flex>

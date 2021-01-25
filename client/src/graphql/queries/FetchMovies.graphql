@@ -1,5 +1,5 @@
-query FetchMovies($offset: Int!) {
-  fetchMovies(offset: $offset) {
+query FetchMovies($cursor: String, $limit: Int!) {
+  fetchMovies(cursor: $cursor, limit: $limit) {
     hasMore
     movies {
       ...MovieFragment
