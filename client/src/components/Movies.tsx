@@ -1,15 +1,15 @@
 import { Button, Flex, SimpleGrid } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { FetchMovieQuery, PaginatedMovies, useFetchMoviesQuery } from "../generated/graphql"
+import React, { memo, useState } from "react"
+import { useFetchMoviesQuery } from "../generated/graphql"
 import { MovieDisplay } from "./MovieDisplay"
 
 interface MoviesProps {
   selectedGenres: {
-    genres: string[]
+    genres: number[]
   }
 }
 
-export const Movies = () => {
+export const Movies = ({selectedGenres}: MoviesProps) => {
 
     const [paginateLoading, setPaginateLoading] = useState(false)
 
@@ -20,7 +20,8 @@ export const Movies = () => {
       }
     })
 
-    data?.fetchMovies.movies
+    console.log(selectedGenres)
+
    
     const onFetchMore = async () => {
       setPaginateLoading(true)

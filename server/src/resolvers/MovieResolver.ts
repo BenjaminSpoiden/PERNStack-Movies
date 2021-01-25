@@ -1,6 +1,7 @@
 import { Movie } from "../db/entity/Movie";
 import { Arg, Field, Int, ObjectType, Query, Resolver } from "type-graphql";
 import { getConnection } from "typeorm";
+import { Genre } from "../db/entity/Genre";
 
 @ObjectType()
 export class PaginatedMovies {
@@ -51,4 +52,10 @@ export class MovieResolver {
             hasMore: moviesQuery.length === overhead
         }
     }
+
+    @Query(() => [Genre])
+    async fetchGenres() {
+        return await Genre.find()
+    }
+
 }

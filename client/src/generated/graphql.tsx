@@ -19,6 +19,7 @@ export type Query = {
   __typename?: 'Query';
   fetchMovie?: Maybe<Movie>;
   fetchMovies: PaginatedMovies;
+  fetchGenres: Array<Genres>;
   fetchUsers: Array<User>;
   fetchUser: User;
   me?: Maybe<User>;
@@ -192,6 +193,17 @@ export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutUserMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'logoutUser'>
+);
+
+export type FetchGenresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FetchGenresQuery = (
+  { __typename?: 'Query' }
+  & { fetchGenres: Array<(
+    { __typename?: 'Genres' }
+    & Pick<Genres, 'id' | 'name'>
+  )> }
 );
 
 export type FetchMovieQueryVariables = Exact<{
@@ -427,6 +439,39 @@ export function useLogoutUserMutation(baseOptions?: Apollo.MutationHookOptions<L
 export type LogoutUserMutationHookResult = ReturnType<typeof useLogoutUserMutation>;
 export type LogoutUserMutationResult = Apollo.MutationResult<LogoutUserMutation>;
 export type LogoutUserMutationOptions = Apollo.BaseMutationOptions<LogoutUserMutation, LogoutUserMutationVariables>;
+export const FetchGenresDocument = gql`
+    query FetchGenres {
+  fetchGenres {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFetchGenresQuery__
+ *
+ * To run a query within a React component, call `useFetchGenresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchGenresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchGenresQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFetchGenresQuery(baseOptions?: Apollo.QueryHookOptions<FetchGenresQuery, FetchGenresQueryVariables>) {
+        return Apollo.useQuery<FetchGenresQuery, FetchGenresQueryVariables>(FetchGenresDocument, baseOptions);
+      }
+export function useFetchGenresLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchGenresQuery, FetchGenresQueryVariables>) {
+          return Apollo.useLazyQuery<FetchGenresQuery, FetchGenresQueryVariables>(FetchGenresDocument, baseOptions);
+        }
+export type FetchGenresQueryHookResult = ReturnType<typeof useFetchGenresQuery>;
+export type FetchGenresLazyQueryHookResult = ReturnType<typeof useFetchGenresLazyQuery>;
+export type FetchGenresQueryResult = Apollo.QueryResult<FetchGenresQuery, FetchGenresQueryVariables>;
 export const FetchMovieDocument = gql`
     query FetchMovie($id: Int!) {
   fetchMovie(id: $id) {

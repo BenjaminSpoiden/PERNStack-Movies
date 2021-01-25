@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import session, { Session } from "express-session"
+import { createGenreLoader } from "src/utils/MovieLoader"
 
 declare global {
     namespace Express {
@@ -10,7 +11,8 @@ declare global {
     
 }
 
-export type MyContext = {
+export interface MyContext {
     req: Request 
-    res: Response
+    res: Response,
+    genreLoader: ReturnType<typeof createGenreLoader>
 }
