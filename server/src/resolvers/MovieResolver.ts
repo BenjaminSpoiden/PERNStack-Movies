@@ -58,4 +58,15 @@ export class MovieResolver {
         return await Genre.find()
     }
 
+    @Query(() => Int)
+    async movieTableLength() {
+
+        await getConnection().query(`
+            DELETE FROM movie 
+            WHERE release_date < '2019%';
+        `)
+
+        return (await Movie.find()).length
+    }
+
 }
