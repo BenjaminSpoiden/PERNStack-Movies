@@ -26,7 +26,7 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
     return (
         <Flex flexDir={["column", "row", "row"]} boxShadow="lg" borderRadius="lg" overflow="hidden" >
             <Image src={movieData.poster || ""}/>
-            <Flex flexDir="column" m={4} w="100%" >
+            <Flex flexDir="column" m={4} w={["auto", "100%"]} >
                 <Flex align="center" justify="space-between">
                     <Heading size="md">{movieData.original_title}</Heading>
                     <IconButton
@@ -55,9 +55,10 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                        
                     </Wrap>
                 </Flex>
-                <Text textAlign="justify" >{movieData.overview}</Text>
-                
-                <Flex my={2} align="center" justify="space-between" >
+                <Flex>
+                    <Text textAlign="justify" wordBreak="break-word" >{movieData.overview}</Text>
+                </Flex>
+                <Flex flexDir={["column", "column", "row"]} my={2} align={["flex-start", "flex-start", "center"]} justify="space-between" >
                     <Flex flexDir="column" >
                         <Text fontSize="sm" color="gray.600">Rating:</Text>
                         <Flex>
