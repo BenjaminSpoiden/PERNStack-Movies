@@ -1,5 +1,4 @@
-import { MyContext } from "src/context/MyContext";
-import { Ctx, Field, Int, ObjectType } from "type-graphql";
+import {  Field, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Movie } from "./Movie";
 import { MovieGenre } from "./MovieGenre";

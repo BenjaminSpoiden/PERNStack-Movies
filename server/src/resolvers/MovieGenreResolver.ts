@@ -1,10 +1,25 @@
 import { MovieGenre } from "../db/entity/MovieGenre";
-import { Arg, Mutation, Resolver, Int, Query } from "type-graphql";
+import { Arg, Mutation, Resolver, Int } from "type-graphql";
 import { Movie } from "../db/entity/Movie";
-import { Genre } from "../db/entity/Genre";
 
 @Resolver()
 export class MovieGenreResolver {
+
+
+    @Mutation(() => Boolean)
+    async deleteMovie(
+        @Arg("movie_id", () => Int) movie_id: number
+    ) {
+        try {
+            await MovieGenre.delete({ movie_id })
+            await Movie.delete({ id: movie_id })
+            return true
+        }catch(e) {
+            console.log(e.message)
+            return false
+        }
+    }
+
 
     @Mutation(() => Boolean)
     async addGenreMovie(
@@ -20,10 +35,4 @@ export class MovieGenreResolver {
         }
     }
 
-    @Query(() => Movie)
-    async moviesWithGenres(
-        @Arg("id", () => Int) id: number
-    ) {
-        return await Movie.findOne({id})
-    }
 }

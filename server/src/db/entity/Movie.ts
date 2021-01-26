@@ -65,7 +65,7 @@ export class Movie extends BaseEntity {
     @Field()
     updated_at: Date
 
-    @Field(() => [Genre])
+    @Field(() => [Genre], {nullable: true})
     async genres(
         @Ctx() {genreLoader}: MyContext
     ) {
