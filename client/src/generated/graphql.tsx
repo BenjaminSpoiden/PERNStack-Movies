@@ -301,7 +301,7 @@ export type SearchMoviesQuery = (
   { __typename?: 'Query' }
   & { searchMovies: Array<(
     { __typename?: 'Movie' }
-    & Pick<Movie, 'id' | 'original_title'>
+    & Pick<Movie, 'id' | 'original_title' | 'poster' | 'overview'>
     & { genres?: Maybe<Array<(
       { __typename?: 'Genre' }
       & Pick<Genre, 'id' | 'name'>
@@ -681,6 +681,8 @@ export const SearchMoviesDocument = gql`
   searchMovies(query: $query) {
     id
     original_title
+    poster
+    overview
     genres {
       id
       name

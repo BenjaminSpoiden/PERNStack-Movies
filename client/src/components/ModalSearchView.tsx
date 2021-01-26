@@ -23,11 +23,16 @@ export const ModalSearchView = () => {
         setData(searchData)
     }, [debouncedSearch])
     
+    const resetData = () => {
+        onClose()
+        setData(undefined)
+    }
+
     return (
         <>
             <SearchInput onClick={onOpen} />
 
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={resetData}>
                 <ModalOverlay />
                 <ModalContent maxW="520px">
                     <SearchInput onChange={e => setSearch(e.target.value)} />
@@ -35,7 +40,7 @@ export const ModalSearchView = () => {
                     ? null
                     :  (
                         //@ts-ignore
-                        <SearchList movies={data.searchMovies} /> 
+                        <SearchList movies={data.searchMovies} onClick={resetData} /> 
                       )}
                 </ModalContent>
             </Modal>

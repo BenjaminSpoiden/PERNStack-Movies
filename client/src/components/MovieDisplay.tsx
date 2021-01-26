@@ -1,6 +1,7 @@
 import { CalendarIcon, StarIcon } from "@chakra-ui/icons"
-import { Flex, Text, Heading, Image, Icon, IconButton, Wrap, WrapItem } from "@chakra-ui/react"
+import { Flex, Text, Heading, Image, Icon, IconButton, Wrap, WrapItem, Button } from "@chakra-ui/react"
 import React, { useState } from "react"
+import { BiCart } from "react-icons/bi"
 import {MdFavorite, MdFavoriteBorder } from "react-icons/md"
 import { Movie } from "../generated/graphql"
 import { useAuth } from "../hooks/useAuth"
@@ -75,6 +76,11 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                         <Text fontSize="sm" color="gray.600">Price:</Text>
                         <Text mt={-1} > {formatter.format(movieData.price / 10)} </Text>
                     </Flex>
+                </Flex>
+                <Flex>
+                    <Button leftIcon={<BiCart />} mt={4} disabled={!me} colorScheme="orange" variant="outline">
+                        Add to card
+                    </Button>
                 </Flex>
             </Flex>
         </Flex>
