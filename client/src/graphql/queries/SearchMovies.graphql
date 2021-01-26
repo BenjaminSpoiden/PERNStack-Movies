@@ -1,0 +1,12 @@
+query SearchMovies($query: String) {
+  searchMovies(query: $query) {
+    id
+    original_title
+    poster
+    overview
+    genres {
+      id
+      name
+    }
+  }
+}

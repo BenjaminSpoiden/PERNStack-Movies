@@ -1,7 +1,8 @@
 import { CalendarIcon, StarIcon } from "@chakra-ui/icons"
-import { Flex, Text, Heading, Image, Icon, IconButton, Button, Wrap, WrapItem } from "@chakra-ui/react"
+import { Flex, Text, Heading, Image, Icon, IconButton, Wrap, WrapItem, Button } from "@chakra-ui/react"
 import React, { useState } from "react"
-import {MdFavorite, MdFavoriteBorder, MdPlayCircleFilled} from "react-icons/md"
+import { BiCart } from "react-icons/bi"
+import {MdFavorite, MdFavoriteBorder } from "react-icons/md"
 import { Movie } from "../generated/graphql"
 import { useAuth } from "../hooks/useAuth"
 
@@ -25,7 +26,7 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
     return (
         <Flex flexDir={["column", "row", "row"]} boxShadow="lg" borderRadius="lg" overflow="hidden" >
             <Image src={movieData.poster || ""}/>
-            <Flex flexDir="column" m={4} w="100%" >
+            <Flex flexDir="column" m={4} w={["auto", "100%"]} >
                 <Flex align="center" justify="space-between">
                     <Heading size="md">{movieData.original_title}</Heading>
                     <IconButton
@@ -46,17 +47,18 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                         <Text fontSize="sm" color="gray.600" ml={1} >{movieData.release_date}</Text>
                     </Flex>
                     <Wrap d="flex" align="center" my={2} >
-                        {movieData.genres.map(genre => (
-                            <WrapItem>
+                        {movieData?.genres?.map(genre => (
+                            <WrapItem key={genre.id} >
                                 <Text fontSize="sm" color="gray.600">{genre.name} /</Text>
                             </WrapItem>
                         ))}
                        
                     </Wrap>
                 </Flex>
-                <Text textAlign="justify" >{movieData.overview}</Text>
-                
-                <Flex my={2} align="center" justify="space-between" >
+                <Flex>
+                    <Text textAlign="justify" wordBreak="break-word" >{movieData.overview}</Text>
+                </Flex>
+                <Flex flexDir={["column", "column", "row"]} my={2} align={["flex-start", "flex-start", "center"]} justify="space-between" >
                     <Flex flexDir="column" >
                         <Text fontSize="sm" color="gray.600">Rating:</Text>
                         <Flex>
@@ -75,6 +77,11 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                         <Text fontSize="sm" color="gray.600">Price:</Text>
                         <Text mt={-1} > {formatter.format(movieData.price / 10)} </Text>
                     </Flex>
+                </Flex>
+                <Flex>
+                    <Button leftIcon={<BiCart />} mt={4} disabled={!me} colorScheme="orange" variant="outline">
+                        Add to card
+                    </Button>
                 </Flex>
             </Flex>
         </Flex>

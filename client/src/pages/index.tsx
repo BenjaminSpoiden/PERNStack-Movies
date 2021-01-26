@@ -4,7 +4,6 @@ import { Container } from '../components/Container'
 import { LaptopWrapper } from "../components/LaptopWrapper"
 import { Movies } from "../components/Movies"
 import { NavBar } from "../components/NavBar"
-import { SearchInput } from "../components/SearchInput"
 import { useFetchGenresQuery } from "../generated/graphql"
 
 
@@ -18,7 +17,8 @@ const Index = () => {
   const [selectedGenres, setSelectGenres] = useState<StateInit>({
     genres: []
   })
-  
+
+
   const {data: genreData} = useFetchGenresQuery()
 
   const updateChanges = (e: React.ChangeEvent<HTMLInputElement>, genreId: number) => {
@@ -41,7 +41,6 @@ const Index = () => {
           <Grid templateColumns={["1fr", "1fr", "1fr 3fr"]} gap={4}>
             <GridItem d={['none', 'none', "flex"]} w="100%" >
               <Flex flexDir="column" align="flex-start" justify="flex-start" >
-               <SearchInput />
                <VStack my={4} display="flex" alignItems="flex-start" justifyContent="flex-start" >
                  {genreData?.fetchGenres.map(genre => (
                   <Checkbox key={genre.id} onChange={(e) => {

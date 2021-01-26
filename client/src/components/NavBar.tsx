@@ -1,12 +1,13 @@
 import { Button, Flex, HStack, IconButton, Text } from "@chakra-ui/react"
 import React from "react"
-import { SearchInput } from "./SearchInput"
 import NextLink from "next/link"
 import { useAuth } from "../hooks/useAuth"
 import { FiLogOut } from "react-icons/fi"
 import { MeDocument, MeQuery, useLogoutUserMutation } from "../generated/graphql"
 import { SettingsIcon } from "@chakra-ui/icons"
-import { BiCart } from "react-icons/bi"
+import { BiCart, BiEuro } from "react-icons/bi"
+import { ModalSearchView } from "./ModalSearchView"
+import { CurrencySwitch } from "./CurrencySwitch"
 
 export const NavBar = () => {
 
@@ -28,6 +29,7 @@ export const NavBar = () => {
                 <Text>
                     Some App Name
                 </Text>
+               <ModalSearchView />
                 {me && !loading
                     ? 
                         <HStack>
@@ -63,6 +65,7 @@ export const NavBar = () => {
                                     }
                                 })}
                             />
+                            <CurrencySwitch aria-label="currency-switch"/>
                         </HStack>
                     :
                         <HStack>
@@ -76,10 +79,9 @@ export const NavBar = () => {
                                     Register
                                 </Button>
                             </NextLink>
+                            <CurrencySwitch aria-label="currency-switch"/>
                         </HStack>
-                    
                 }
-                
             </Flex> 
         </Flex>
     )
