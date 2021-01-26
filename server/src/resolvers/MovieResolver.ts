@@ -61,12 +61,21 @@ export class MovieResolver {
     @Query(() => Int)
     async movieTableLength() {
 
-        await getConnection().query(`
-            DELETE FROM movie 
-            WHERE release_date < '2019%';
-        `)
-
         return (await Movie.find()).length
     }
 
+
+    @Query(() => [Movie])
+    async searchMovies(
+        @Arg("query") query: string
+    ) {
+
+        const searchMovies = await getConnection().query(`
+            SELECT * FROM movie
+            WHERE LOWER(original_title) LIKE '%${query}%'
+            ORDER BY release_date DESC;
+        `) as Movie[]
+
+       return searchMovies
+    }
 }
