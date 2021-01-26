@@ -67,7 +67,7 @@ export class MovieResolver {
 
     @Query(() => [Movie])
     async searchMovies(
-        @Arg("query") query: string
+        @Arg("query", () => String, {nullable: true}) query?: string
     ) {
 
         const searchMovies = await getConnection().query(`

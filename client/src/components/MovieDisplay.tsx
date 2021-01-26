@@ -1,7 +1,7 @@
 import { CalendarIcon, StarIcon } from "@chakra-ui/icons"
-import { Flex, Text, Heading, Image, Icon, IconButton, Button, Wrap, WrapItem } from "@chakra-ui/react"
+import { Flex, Text, Heading, Image, Icon, IconButton, Wrap, WrapItem } from "@chakra-ui/react"
 import React, { useState } from "react"
-import {MdFavorite, MdFavoriteBorder, MdPlayCircleFilled} from "react-icons/md"
+import {MdFavorite, MdFavoriteBorder } from "react-icons/md"
 import { Movie } from "../generated/graphql"
 import { useAuth } from "../hooks/useAuth"
 
@@ -46,8 +46,8 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                         <Text fontSize="sm" color="gray.600" ml={1} >{movieData.release_date}</Text>
                     </Flex>
                     <Wrap d="flex" align="center" my={2} >
-                        {movieData.genres.map(genre => (
-                            <WrapItem>
+                        {movieData?.genres?.map(genre => (
+                            <WrapItem key={genre.id} >
                                 <Text fontSize="sm" color="gray.600">{genre.name} /</Text>
                             </WrapItem>
                         ))}

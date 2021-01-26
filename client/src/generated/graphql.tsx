@@ -19,7 +19,9 @@ export type Query = {
   __typename?: 'Query';
   fetchMovie?: Maybe<Movie>;
   fetchMovies: PaginatedMovies;
-  fetchGenres: Array<Genres>;
+  fetchGenres: Array<Genre>;
+  movieTableLength: Scalars['Int'];
+  searchMovies: Array<Movie>;
   fetchUsers: Array<User>;
   fetchUser: User;
   me?: Maybe<User>;
@@ -37,6 +39,11 @@ export type QueryFetchMoviesArgs = {
 };
 
 
+export type QuerySearchMoviesArgs = {
+  query?: Maybe<Scalars['String']>;
+};
+
+
 export type QueryFetchUserArgs = {
   id: Scalars['Int'];
 };
@@ -51,20 +58,20 @@ export type Movie = {
   adult: Scalars['Boolean'];
   original_title?: Maybe<Scalars['String']>;
   poster?: Maybe<Scalars['String']>;
-  genres: Array<Genres>;
   release_date?: Maybe<Scalars['String']>;
   vote_average?: Maybe<Scalars['Float']>;
   vote_count?: Maybe<Scalars['Int']>;
   created_at: Scalars['String'];
   updated_at: Scalars['DateTime'];
+  genres?: Maybe<Array<Genre>>;
 };
 
-export type Genres = {
-  __typename?: 'Genres';
+
+export type Genre = {
+  __typename?: 'Genre';
   id: Scalars['Int'];
   name: Scalars['String'];
 };
-
 
 export type PaginatedMovies = {
   __typename?: 'PaginatedMovies';
@@ -88,6 +95,8 @@ export type Mutation = {
   loginUser: UserResponse;
   logoutUser: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
+  deleteMovie: Scalars['Boolean'];
+  addGenreMovie: Scalars['Boolean'];
 };
 
 
@@ -104,6 +113,17 @@ export type MutationLoginUserArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationDeleteMovieArgs = {
+  movie_id: Scalars['Int'];
+};
+
+
+export type MutationAddGenreMovieArgs = {
+  genre_id: Scalars['Int'];
+  movie_id: Scalars['Int'];
 };
 
 export type UserResponse = {
@@ -127,10 +147,10 @@ export type UserInput = {
 export type MovieFragmentFragment = (
   { __typename?: 'Movie' }
   & Pick<Movie, 'id' | 'wish_list' | 'popularity' | 'price' | 'overview' | 'adult' | 'original_title' | 'poster' | 'release_date' | 'vote_count' | 'vote_average' | 'created_at' | 'updated_at'>
-  & { genres: Array<(
-    { __typename?: 'Genres' }
-    & Pick<Genres, 'id' | 'name'>
-  )> }
+  & { genres?: Maybe<Array<(
+    { __typename?: 'Genre' }
+    & Pick<Genre, 'id' | 'name'>
+  )>> }
 );
 
 export type UserFragmentFragment = (
@@ -201,8 +221,8 @@ export type FetchGenresQueryVariables = Exact<{ [key: string]: never; }>;
 export type FetchGenresQuery = (
   { __typename?: 'Query' }
   & { fetchGenres: Array<(
-    { __typename?: 'Genres' }
-    & Pick<Genres, 'id' | 'name'>
+    { __typename?: 'Genre' }
+    & Pick<Genre, 'id' | 'name'>
   )> }
 );
 
@@ -269,6 +289,23 @@ export type MeQuery = (
   & { me?: Maybe<(
     { __typename?: 'User' }
     & UserFragmentFragment
+  )> }
+);
+
+export type SearchMoviesQueryVariables = Exact<{
+  query?: Maybe<Scalars['String']>;
+}>;
+
+
+export type SearchMoviesQuery = (
+  { __typename?: 'Query' }
+  & { searchMovies: Array<(
+    { __typename?: 'Movie' }
+    & Pick<Movie, 'id' | 'original_title'>
+    & { genres?: Maybe<Array<(
+      { __typename?: 'Genre' }
+      & Pick<Genre, 'id' | 'name'>
+    )>> }
   )> }
 );
 
@@ -639,3 +676,41 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const SearchMoviesDocument = gql`
+    query SearchMovies($query: String) {
+  searchMovies(query: $query) {
+    id
+    original_title
+    genres {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchMoviesQuery__
+ *
+ * To run a query within a React component, call `useSearchMoviesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchMoviesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchMoviesQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useSearchMoviesQuery(baseOptions?: Apollo.QueryHookOptions<SearchMoviesQuery, SearchMoviesQueryVariables>) {
+        return Apollo.useQuery<SearchMoviesQuery, SearchMoviesQueryVariables>(SearchMoviesDocument, baseOptions);
+      }
+export function useSearchMoviesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchMoviesQuery, SearchMoviesQueryVariables>) {
+          return Apollo.useLazyQuery<SearchMoviesQuery, SearchMoviesQueryVariables>(SearchMoviesDocument, baseOptions);
+        }
+export type SearchMoviesQueryHookResult = ReturnType<typeof useSearchMoviesQuery>;
+export type SearchMoviesLazyQueryHookResult = ReturnType<typeof useSearchMoviesLazyQuery>;
+export type SearchMoviesQueryResult = Apollo.QueryResult<SearchMoviesQuery, SearchMoviesQueryVariables>;

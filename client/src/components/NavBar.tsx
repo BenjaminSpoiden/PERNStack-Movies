@@ -7,6 +7,7 @@ import { FiLogOut } from "react-icons/fi"
 import { MeDocument, MeQuery, useLogoutUserMutation } from "../generated/graphql"
 import { SettingsIcon } from "@chakra-ui/icons"
 import { BiCart } from "react-icons/bi"
+import { ModalSearchView } from "./ModalSearchView"
 
 export const NavBar = () => {
 
@@ -28,6 +29,7 @@ export const NavBar = () => {
                 <Text>
                     Some App Name
                 </Text>
+               <ModalSearchView />
                 {me && !loading
                     ? 
                         <HStack>

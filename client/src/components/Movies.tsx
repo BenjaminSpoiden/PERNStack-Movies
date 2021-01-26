@@ -1,5 +1,5 @@
 import { Button, Flex, SimpleGrid } from "@chakra-ui/react"
-import React, { memo, useState } from "react"
+import React, { useState } from "react"
 import { useFetchMoviesQuery } from "../generated/graphql"
 import { MovieDisplay } from "./MovieDisplay"
 
