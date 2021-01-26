@@ -46,6 +46,7 @@ export const NavBar = () => {
                                 colorScheme="orange"
                                 children={<BiCart />}
                             />
+                            <CurrencySwitch aria-label="currency-switch"/>
                             <IconButton 
                                 aria-label="sign-out" 
                                 variant="outline"
@@ -65,7 +66,6 @@ export const NavBar = () => {
                                     }
                                 })}
                             />
-                            <CurrencySwitch aria-label="currency-switch"/>
                         </HStack>
                     :
                         <HStack>
