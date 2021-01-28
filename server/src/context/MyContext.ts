@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import session, { Session } from "express-session"
+import { createCartLoader } from "src/utils/CartLoader"
 import { createGenreLoader } from "src/utils/MovieLoader"
 
 declare global {
@@ -14,5 +15,6 @@ declare global {
 export interface MyContext {
     req: Request 
     res: Response,
-    genreLoader: ReturnType<typeof createGenreLoader>
+    genreLoader: ReturnType<typeof createGenreLoader>,
+    cartLoader: ReturnType<typeof createCartLoader>
 }

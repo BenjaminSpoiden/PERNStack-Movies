@@ -1,5 +1,9 @@
-import { Field, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { MyContext } from "src/context/MyContext";
+import { Ctx, Field, Int, ObjectType } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Cart } from "./Cart";
+import { Movie } from "./Movie";
+
 
 @ObjectType()
 @Entity()
@@ -24,6 +28,9 @@ export class User extends BaseEntity {
     @Column({nullable: true})
     age?: number
 
+    @OneToMany(() => Cart, cart => cart.user)
+    movieConnection: Promise<Cart[]>
+
     @Field(() => String)
     @CreateDateColumn()
     created_at: Date
@@ -31,4 +38,11 @@ export class User extends BaseEntity {
     @Field(() => String)
     @UpdateDateColumn()
     update_at: Date
+
+    @Field(() => [Movie], {nullable: true}) 
+    async movieItems(
+        @Ctx() {cartLoader}: MyContext
+    ) {
+        return cartLoader.load(this.id)
+    }
 }

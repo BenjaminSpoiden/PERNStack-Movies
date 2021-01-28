@@ -1,8 +1,10 @@
 import { MyContext } from "src/context/MyContext";
 import { Ctx, Field, Float, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Cart } from "./Cart";
 import { Genre } from "./Genre";
 import { MovieGenre } from "./MovieGenre";
+import { User } from "./User";
 
 
 @ObjectType()
@@ -29,6 +31,8 @@ export class Movie extends BaseEntity {
     @Field(() => String, {nullable: true})
     overview: string
 
+    @OneToMany(() => Cart, cart => cart.movies)
+    userConnection: Promise<Cart[]>
 
     @OneToMany(() => MovieGenre, mg => mg.genre)
     genreConnection: Promise<MovieGenre[]>

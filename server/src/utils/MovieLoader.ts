@@ -17,7 +17,6 @@ const batchMovies = async(movies_ids: number[]) => {
         }
     })
 
-    console.log("movieGenre: ", movieGenre)
 
     const genreIdToMovies: {[key: number]: Genre[]} = {}
 
@@ -28,8 +27,6 @@ const batchMovies = async(movies_ids: number[]) => {
             genreIdToMovies[mg.movie_id] = [(mg as any).__genre__]
         }
     })
-
-    console.log("movieGenre2: ", movieGenre)
 
     return movies_ids.map(movie_id => {
         

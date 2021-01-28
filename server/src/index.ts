@@ -16,6 +16,8 @@ import connectRedis from "connect-redis"
 import { MovieGenreResolver } from "./resolvers/MovieGenreResolver"
 // import { MyContext } from "./context/MyContext"
 import { createGenreLoader } from "./utils/MovieLoader"
+import { createCartLoader } from "./utils/CartLoader"
+import { CartResolver } from "./resolvers/CartResolver"
 
 const initServer = async() => {
 
@@ -55,14 +57,16 @@ const initServer = async() => {
             resolvers: [
                 MovieResolver,
                 UserResolver,
-                MovieGenreResolver
+                MovieGenreResolver,
+                CartResolver
             ],
             validate: false
         }),
         context: ({req, res}: any) => ({
             req,
             res,
-            genreLoader: createGenreLoader()
+            genreLoader: createGenreLoader(),
+            cartLoader: createCartLoader()
         })
     })
 
