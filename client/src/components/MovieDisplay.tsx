@@ -1,8 +1,10 @@
+import { useQuery } from "@apollo/client"
 import { CalendarIcon, StarIcon } from "@chakra-ui/icons"
 import { Flex, Text, Heading, Image, Icon, IconButton, Wrap, WrapItem, Button } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { BiCart } from "react-icons/bi"
 import {MdFavorite, MdFavoriteBorder } from "react-icons/md"
+import { QUERY_CURRENCY } from "../apollo/queries"
 import { Movie } from "../generated/graphql"
 import { useAuth } from "../hooks/useAuth"
 
@@ -13,12 +15,10 @@ interface MovieData {
 
 export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
 
-    const formatter = new Intl.NumberFormat('en-BE', {
-        style: "currency",
-        currency: "EUR",
-        
-    }) 
-
+    const currencyQueryResult = useQuery(QUERY_CURRENCY)
+  
+    const currentCurrency = currencyQueryResult.data.currency.currentCurrency
+    
     const [fav, setFav] = useState(movieData.wish_list)
 
     const {me} = useAuth()
@@ -75,7 +75,7 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                     </Flex>
                     <Flex flexDir="column" align="center" >
                         <Text fontSize="sm" color="gray.600">Price:</Text>
-                        <Text mt={-1} > {formatter.format(movieData.price / 10)} </Text>
+                        <Text mt={-1} > {currentCurrency === 'EUR' ? '€' : '$'}{movieData.price.toFixed(2)}</Text>
                     </Flex>
                 </Flex>
                 <Flex>

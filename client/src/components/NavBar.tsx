@@ -5,7 +5,7 @@ import { useAuth } from "../hooks/useAuth"
 import { FiLogOut } from "react-icons/fi"
 import { MeDocument, MeQuery, useLogoutUserMutation } from "../generated/graphql"
 import { SettingsIcon } from "@chakra-ui/icons"
-import { BiCart, BiEuro } from "react-icons/bi"
+import { BiCart } from "react-icons/bi"
 import { ModalSearchView } from "./ModalSearchView"
 import { CurrencySwitch } from "./CurrencySwitch"
 
@@ -54,7 +54,6 @@ export const NavBar = () => {
                                 colorScheme="red"
                                 children={<FiLogOut />}
                                 onClick={async () => await logoutUser({
-                                    
                                     update: (cache) => {
                                         cache.writeQuery<MeQuery>({
                                             query: MeDocument,

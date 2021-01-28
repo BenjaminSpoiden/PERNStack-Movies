@@ -17,7 +17,7 @@ export class MovieResolver {
 
     @Query(() => Movie, {nullable: true})
     async fetchMovie(
-        @Arg('id', () => Int) id: number
+        @Arg('id', () => Int) id: number 
     ): Promise<Movie | null> {
         return new Promise((resolve, reject) => {
             Movie.findOne(id)
