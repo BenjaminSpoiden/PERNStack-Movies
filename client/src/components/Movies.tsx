@@ -19,9 +19,6 @@ export const Movies = ({selectedGenres}: MoviesProps) => {
         limit: 10
       }
     })
-
-    console.log(selectedGenres)
-
    
     const onFetchMore = async () => {
       setPaginateLoading(true)
@@ -36,7 +33,7 @@ export const Movies = ({selectedGenres}: MoviesProps) => {
       setPaginateLoading(false)
     }
 
-    console.log(data)
+   
 
     return (
         <>

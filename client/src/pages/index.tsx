@@ -18,6 +18,12 @@ const Index = () => {
     genres: []
   })
 
+  // const cartQueryResult = useQuery(QUERY_CART)
+ 
+
+  // console.log("cartQuery: ", cartQueryResult.data)
+
+
 
   const {data: genreData} = useFetchGenresQuery()
 
