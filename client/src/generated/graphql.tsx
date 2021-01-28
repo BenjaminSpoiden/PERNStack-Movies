@@ -87,6 +87,7 @@ export type User = {
   age?: Maybe<Scalars['Int']>;
   created_at: Scalars['String'];
   update_at: Scalars['String'];
+  movieItems?: Maybe<Array<Movie>>;
 };
 
 export type Mutation = {
@@ -97,6 +98,7 @@ export type Mutation = {
   deleteUser: Scalars['Boolean'];
   deleteMovie: Scalars['Boolean'];
   addGenreMovie: Scalars['Boolean'];
+  addItems: Scalars['Boolean'];
 };
 
 
@@ -124,6 +126,12 @@ export type MutationDeleteMovieArgs = {
 export type MutationAddGenreMovieArgs = {
   genre_id: Scalars['Int'];
   movie_id: Scalars['Int'];
+};
+
+
+export type MutationAddItemsArgs = {
+  movie_id: Scalars['Int'];
+  user_id: Scalars['Int'];
 };
 
 export type UserResponse = {
@@ -156,6 +164,14 @@ export type MovieFragmentFragment = (
 export type UserFragmentFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'age' | 'created_at' | 'update_at'>
+  & { movieItems?: Maybe<Array<(
+    { __typename?: 'Movie' }
+    & Pick<Movie, 'id' | 'original_title' | 'price'>
+    & { genres?: Maybe<Array<(
+      { __typename?: 'Genre' }
+      & Pick<Genre, 'id' | 'name'>
+    )>> }
+  )>> }
 );
 
 export type CreateUserMutationVariables = Exact<{
@@ -336,6 +352,15 @@ export const UserFragmentFragmentDoc = gql`
   username
   email
   age
+  movieItems {
+    id
+    original_title
+    price
+    genres {
+      id
+      name
+    }
+  }
   created_at
   update_at
 }

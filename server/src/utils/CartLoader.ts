@@ -9,7 +9,7 @@ const batchCart = async(user_ids: number[]) => {
         join: {
             alias: "c",
             innerJoinAndSelect: {
-                movies: "c.movies"
+                movie: "c.movie"
             }
         },
         where: {
@@ -17,21 +17,19 @@ const batchCart = async(user_ids: number[]) => {
         }
     })
 
-    console.log("cart: ", cart)
 
-    const movieIdToCart: {[key: number]: Movie[]} = {}
+    const movieIdToCart: Record<number, Movie[]> = {}
 
     cart.forEach(item => {
-        if(item.movie_id in movieIdToCart) {
-            movieIdToCart[item.user_id].push((item as any).__movies__)
-        }else {
-            movieIdToCart[item.user_id] = [(item as any).__movies__]
-        }
+        console.log('item: ', item)
+        if(item.user_id in movieIdToCart) movieIdToCart[item.user_id].push((item as any).__movie__)
+        else movieIdToCart[item.user_id] = [(item as any).__movie__]
+        
     })
 
-    console.log("movie: ", movieIdToCart)
-
-    return user_ids.map(movie_id => movieIdToCart[movie_id])
+    return user_ids.map(user_id => { 
+        return movieIdToCart[user_id]
+    })
 }
 
 //@ts-ignore
