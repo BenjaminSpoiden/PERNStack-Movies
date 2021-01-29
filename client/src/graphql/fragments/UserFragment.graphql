@@ -6,6 +6,7 @@ fragment UserFragment on User {
   movieItems {
     id
     original_title
+    poster
     price
     genres {
       id

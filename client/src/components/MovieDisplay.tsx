@@ -5,7 +5,7 @@ import React, { useState } from "react"
 import { BiCart } from "react-icons/bi"
 import {MdFavorite, MdFavoriteBorder } from "react-icons/md"
 import { QUERY_CURRENCY } from "../apollo/queries"
-import { Movie } from "../generated/graphql"
+import { MeDocument, Movie, useAdditemMutation } from "../generated/graphql"
 import { useAuth } from "../hooks/useAuth"
 
 interface MovieData {
@@ -23,12 +23,14 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
 
     const {me} = useAuth()
 
+    const [addItem] = useAdditemMutation()
+
     return (
         <Flex flexDir={["column", "row", "row"]} boxShadow="lg" borderRadius="lg" overflow="hidden" >
             <Image src={movieData.poster || ""}/>
             <Flex flexDir="column" m={4} w={["auto", "100%"]} >
                 <Flex align="center" justify="space-between">
-                    <Heading size="md">{movieData.original_title}</Heading>
+                    <Heading size="md" textColor="white" >{movieData.original_title}</Heading>
                     <IconButton
                         onClick={() => {
                             setFav(c => !c)
@@ -79,7 +81,21 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
                     </Flex>
                 </Flex>
                 <Flex>
-                    <Button leftIcon={<BiCart />} mt={4} disabled={!me} colorScheme="orange" variant="outline">
+                    <Button 
+                        leftIcon={<BiCart />} 
+                        mt={4} 
+                        disabled={!me} 
+                        colorScheme="orange" 
+                        variant="outline"
+                        onClick={() => addItem({
+                            variables: {
+                                movie_id: movieData.id
+                            },
+                            refetchQueries: [{
+                                query: MeDocument
+                            }]
+                        })}
+                        >
                         Add to card
                     </Button>
                 </Flex>

@@ -24,7 +24,25 @@ export class CartResolver {
     }
 
     @Mutation(() => Boolean)
-    async addItems(
+    async deleteItem(
+        @Arg("movie_id", () => Int) movie_id: number,
+        @Ctx() {req}: MyContext
+    ) {
+        //@ts-ignore
+        const user_id = req.session.userId
+        if(!user_id) return false
+
+        try {
+            await Cart.delete({user_id, movie_id})
+            return true
+        }catch(e) {
+            console.log(e.message)
+            return false
+        }
+    }
+
+    @Mutation(() => Boolean)
+    async addItem(
         @Arg("movie_id", () => Int) movie_id: number,
         @Ctx() {req}: MyContext
     ) {

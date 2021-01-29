@@ -912,7 +912,23 @@
             "deprecationReason": null
           },
           {
-            "name": "addItems",
+            "name": "deleteItems",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deleteItem",
             "description": null,
             "args": [
               {
@@ -928,9 +944,26 @@
                   }
                 },
                 "defaultValue": null
-              },
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addItem",
+            "description": null,
+            "args": [
               {
-                "name": "user_id",
+                "name": "movie_id",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",

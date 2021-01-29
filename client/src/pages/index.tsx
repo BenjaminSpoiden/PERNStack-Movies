@@ -1,10 +1,11 @@
 import { Checkbox, Flex, Grid, GridItem, VStack} from "@chakra-ui/react"
 import React, { useState } from "react"
+import { addApolloState, initializeApolloClient } from "../apollo/client"
 import { Container } from '../components/Container'
 import { LaptopWrapper } from "../components/LaptopWrapper"
 import { Movies } from "../components/Movies"
 import { NavBar } from "../components/NavBar"
-import { useFetchGenresQuery } from "../generated/graphql"
+import { FetchGenresDocument, FetchGenresQuery, useFetchGenresQuery } from "../generated/graphql"
 
 
 type StateInit = {
@@ -65,5 +66,19 @@ const Index = () => {
     </Container>
   )
 }
+
+export async function getStaticProps() {
+  const apolloClient = initializeApolloClient()
+
+  await apolloClient.query<FetchGenresQuery>({
+    query: FetchGenresDocument
+  })
+
+  return addApolloState(apolloClient, {
+    props: {},
+    revalidate: 1
+  })
+}
+
 export default Index
 

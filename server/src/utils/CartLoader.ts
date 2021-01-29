@@ -17,11 +17,11 @@ const batchCart = async(user_ids: number[]) => {
         }
     })
 
-
+    console.log(cart)
     const movieIdToCart: Record<number, Movie[]> = {}
 
     cart.forEach(item => {
-        console.log('item: ', item)
+        // console.log('item: ', item)
         if(item.user_id in movieIdToCart) movieIdToCart[item.user_id].push((item as any).__movie__)
         else movieIdToCart[item.user_id] = [(item as any).__movie__]
         
