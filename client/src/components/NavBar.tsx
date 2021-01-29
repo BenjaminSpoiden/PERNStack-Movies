@@ -8,12 +8,14 @@ import { SettingsIcon } from "@chakra-ui/icons"
 import { BiCart } from "react-icons/bi"
 import { ModalSearchView } from "./ModalSearchView"
 import { CurrencySwitch } from "./CurrencySwitch"
+import Badge from "antd/lib/badge"
 
 export const NavBar = () => {
 
     const { me, loading } = useAuth()
     const [logoutUser] = useLogoutUserMutation()
     
+
     return (
         <Flex 
             as="nav" 
@@ -40,12 +42,16 @@ export const NavBar = () => {
                                 colorScheme="gray"
                                 children={<SettingsIcon />}
                             />
-                            <IconButton
-                                aria-label="cart"
-                                fontSize="28px"
-                                colorScheme="orange"
-                                children={<BiCart />}
-                            />
+                            <NextLink href="/cart/[id]" as={`/cart/${me.id}`} >
+                                <Badge count={me.movieItems?.length} style={{backgroundColor: "orange"}} >
+                                    <IconButton
+                                        aria-label="cart"
+                                        fontSize="28px"
+                                        colorScheme="orange"
+                                        children={<BiCart />}
+                                    />
+                                </Badge>
+                            </NextLink>
                             <CurrencySwitch aria-label="currency-switch"/>
                             <IconButton 
                                 aria-label="sign-out" 

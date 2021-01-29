@@ -1,0 +1,3 @@
+mutation Additem($movie_id: Int!) {
+  addItem(movie_id: $movie_id)
+}

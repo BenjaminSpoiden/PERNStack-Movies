@@ -3,6 +3,16 @@ fragment UserFragment on User {
   username
   email
   age
+  movieItems {
+    id
+    original_title
+    poster
+    price
+    genres {
+      id
+      name
+    }
+  }
   created_at
   update_at
 }
