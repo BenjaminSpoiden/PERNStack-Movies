@@ -1,6 +1,6 @@
 import { InMemoryCache, makeVar, ReactiveVar } from "@apollo/client";
 import { PaginatedMovies } from "../generated/graphql";
-import { CartItem, Currency } from "../model/Cart";
+import { Currency } from "../model/Currency";
 
 export const cache = new InMemoryCache({
     typePolicies: {
@@ -16,11 +16,6 @@ export const cache = new InMemoryCache({
                         }
                     }
                 },
-                cart: {
-                    read() {
-                        return cartVar()
-                    }
-                },
                 currency: {
                     read() {
                         return currencyVar()
@@ -32,15 +27,9 @@ export const cache = new InMemoryCache({
 })
 
 
-const initCart: CartItem = {
-    id: 1,
-    original_title: "test",
-    price: 10
-}
 
 const initCurrency: Currency = {
     currentCurrency: 'EUR'
 }
 
-export const cartVar: ReactiveVar<CartItem> = makeVar<CartItem>(initCart)
 export const currencyVar: ReactiveVar<Currency> = makeVar<Currency>(initCurrency)

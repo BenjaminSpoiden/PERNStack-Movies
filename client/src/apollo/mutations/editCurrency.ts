@@ -1,5 +1,5 @@
 import { ReactiveVar } from "@apollo/client/core";
-import { Currency } from "../../model/Cart";
+import { Currency } from "../../model/Currency";
 
 const convertCurrency = (currency: ReactiveVar<Currency>, switcher: boolean) => {
     let newCurrency: Currency = {
