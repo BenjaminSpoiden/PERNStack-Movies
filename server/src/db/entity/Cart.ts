@@ -1,4 +1,3 @@
-import { Field, ObjectType } from "type-graphql";
 import { BaseEntity, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Movie } from "./Movie";
 import { User } from "./User";

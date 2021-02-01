@@ -7,7 +7,7 @@ export const cache = new InMemoryCache({
         Query: {
             fields: {
                 fetchMovies: {
-                    keyArgs: ["offset"],
+                    keyArgs: ["selected_genres"],
                     merge: (existing: PaginatedMovies | undefined, incoming: PaginatedMovies): PaginatedMovies => {
                         
                         return {

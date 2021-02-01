@@ -45,6 +45,24 @@
             "description": null,
             "args": [
               {
+                "name": "selected_genres",
+                "description": null,
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "cursor",
                 "description": null,
                 "type": {

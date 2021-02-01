@@ -4,7 +4,7 @@ import { useFetchMoviesQuery } from "../generated/graphql"
 import { MovieDisplay } from "./MovieDisplay"
 
 interface MoviesProps {
-  selectedGenres: {
+  selectedGenres?: {
     genres: number[]
   }
 }
@@ -12,14 +12,15 @@ interface MoviesProps {
 export const Movies = ({selectedGenres}: MoviesProps) => {
 
     const [paginateLoading, setPaginateLoading] = useState(false)
-
     const {data, fetchMore, variables} = useFetchMoviesQuery({
       variables: {
-        cursor: null, 
-        limit: 10
+        limit: 10,
+        cursor: null,
+        selected_genres: selectedGenres?.genres
       }
     })
-   
+
+  
     const onFetchMore = async () => {
       setPaginateLoading(true)
       
@@ -33,17 +34,15 @@ export const Movies = ({selectedGenres}: MoviesProps) => {
       setPaginateLoading(false)
     }
 
-   
-
     return (
         <>
           <Flex flexDir="column" >
             <SimpleGrid columns={[1]} gap={8} >
               {
                 data
-                  ? data.fetchMovies.movies.map(movie => (
+                  ? data.fetchMovies.movies.map((movie, index) => (
                     <MovieDisplay
-                      key={movie.id}
+                      key={index}
                       movieData={movie}
                     />
                   ))

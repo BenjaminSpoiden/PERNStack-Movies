@@ -1,12 +1,12 @@
 import { Checkbox, Flex, Grid, GridItem, VStack} from "@chakra-ui/react"
 import Head from "next/head"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { addApolloState, initializeApolloClient } from "../apollo/client"
 import { Container } from '../components/Container'
 import { LaptopWrapper } from "../components/LaptopWrapper"
 import { Movies } from "../components/Movies"
 import { NavBar } from "../components/NavBar"
-import { FetchGenresDocument, FetchGenresQuery, useFetchGenresQuery } from "../generated/graphql"
+import { FetchGenresDocument, FetchGenresQuery, useFetchGenresQuery, useFetchMoviesLazyQuery, useFetchMoviesQuery } from "../generated/graphql"
 
 
 type StateInit = {
@@ -20,13 +20,7 @@ const Index = () => {
     genres: []
   })
 
-  // const cartQueryResult = useQuery(QUERY_CART)
- 
-
-  // console.log("cartQuery: ", cartQueryResult.data)
-
-
-
+  
   const {data: genreData} = useFetchGenresQuery()
 
   const updateChanges = (e: React.ChangeEvent<HTMLInputElement>, genreId: number) => {

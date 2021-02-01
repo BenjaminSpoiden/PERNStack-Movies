@@ -1,5 +1,9 @@
-query FetchMovies($cursor: String, $limit: Int!) {
-  fetchMovies(cursor: $cursor, limit: $limit) {
+query FetchMovies($cursor: String, $limit: Int!, $selected_genres: [Int!]) {
+  fetchMovies(
+    cursor: $cursor
+    limit: $limit
+    selected_genres: $selected_genres
+  ) {
     hasMore
     movies {
       ...MovieFragment

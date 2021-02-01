@@ -34,6 +34,7 @@ export type QueryFetchMovieArgs = {
 
 
 export type QueryFetchMoviesArgs = {
+  selected_genres?: Maybe<Array<Scalars['Int']>>;
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
 };
@@ -292,6 +293,7 @@ export type FetchMovieQuery = (
 export type FetchMoviesQueryVariables = Exact<{
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
+  selected_genres?: Maybe<Array<Scalars['Int']> | Scalars['Int']>;
 }>;
 
 
@@ -692,8 +694,8 @@ export type FetchMovieQueryHookResult = ReturnType<typeof useFetchMovieQuery>;
 export type FetchMovieLazyQueryHookResult = ReturnType<typeof useFetchMovieLazyQuery>;
 export type FetchMovieQueryResult = Apollo.QueryResult<FetchMovieQuery, FetchMovieQueryVariables>;
 export const FetchMoviesDocument = gql`
-    query FetchMovies($cursor: String, $limit: Int!) {
-  fetchMovies(cursor: $cursor, limit: $limit) {
+    query FetchMovies($cursor: String, $limit: Int!, $selected_genres: [Int!]) {
+  fetchMovies(cursor: $cursor, limit: $limit, selected_genres: $selected_genres) {
     hasMore
     movies {
       ...MovieFragment
@@ -716,6 +718,7 @@ export const FetchMoviesDocument = gql`
  *   variables: {
  *      cursor: // value for 'cursor'
  *      limit: // value for 'limit'
+ *      selected_genres: // value for 'selected_genres'
  *   },
  * });
  */
