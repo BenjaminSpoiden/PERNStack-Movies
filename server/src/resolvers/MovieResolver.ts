@@ -41,13 +41,6 @@ export class MovieResolver {
         const threshold = Math.min(50, limit)
         const overhead = threshold + 1
 
-        // const moviesQuery = await getConnection().query(`
-        //     SELECT * FROM movie
-        //     ${cursor ? `WHERE movie.release_date < '${cursor}'` : ``}
-        //     ORDER BY movie.release_date DESC
-        //     LIMIT ${overhead};
-        // `) as Movie[]
-
         const arrayToString = () => {
             return selected_genres
                 ?.map((item, index, self) => {
