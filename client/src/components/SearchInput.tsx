@@ -6,7 +6,7 @@ import React from "react"
 export const SearchInput = (props: InputProps) => {
 
     return (
-        <InputGroup maxW="520px" >
+        <InputGroup w="420px" >
             <InputLeftElement
                 pointerEvents="none"
                 children={<SearchIcon color="gray.300"/>}
