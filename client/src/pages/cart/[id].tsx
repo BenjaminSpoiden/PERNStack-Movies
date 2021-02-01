@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client"
 import { Divider, Flex, SimpleGrid, Text, Button, useToast } from "@chakra-ui/react"
 import { useRouter } from "next/dist/client/router"
+import Head from "next/head"
 import React from "react"
 import { addApolloState, initializeApolloClient } from "../../apollo/client"
 import { QUERY_CURRENCY } from "../../apollo/queries"
@@ -13,7 +14,7 @@ import { useGetCart } from "../../hooks/useGetCart"
 
 const Cart = () => {
    
-    const {data, loading, error} = useGetCart()
+    const {data, loading} = useGetCart()
     const router = useRouter()
     const toast = useToast()
     
@@ -57,35 +58,40 @@ const Cart = () => {
     }
 
     return (
-        <Container minH="100vh">
-            <NavBar />
-            <LaptopWrapper>
-                <Flex mt="100px" maxW="1280px" align="center" flexDir="column" p={4}>
-                    <SimpleGrid maxW="768px" w="100%" spacing={4} >
-                        {data.me.movieItems?.map(item => (
-                            <CartItem 
-                                key={item.id} 
-                                movieItem={item} 
-                                currentCurrency={currentCurrency}
-                            />
-                        ))}
-                    </SimpleGrid>
-                    <Flex flexDir="column" align="flex-end" maxW="768px" w="100%" >
-                        <Divider w="250px" my={4}/>
-                        <Text fontSize="lg">Total Price: {currentCurrency === 'EUR' ? '€' : '$'} {totalPrice().toFixed(2)}</Text>
-                        <Button 
-                            mt={4} 
-                            variant="outline" 
-                            colorScheme="green"
-                            isLoading={loadingPurchase}
-                            onClick={onPurchase}
-                            >
-                                Purchase Product
-                        </Button>
+        <>
+            <Head>
+                <title>Cart</title>
+            </Head>
+            <Container minH="100vh">
+                <NavBar />
+                <LaptopWrapper>
+                    <Flex mt="100px" maxW="1280px" align="center" flexDir="column" p={4}>
+                        <SimpleGrid maxW="768px" w="100%" spacing={4} >
+                            {data.me.movieItems?.map(item => (
+                                <CartItem 
+                                    key={item.id} 
+                                    movieItem={item} 
+                                    currentCurrency={currentCurrency}
+                                />
+                            ))}
+                        </SimpleGrid>
+                        <Flex flexDir="column" align="flex-end" maxW="768px" w="100%" >
+                            <Divider w="250px" my={4}/>
+                            <Text fontSize="lg">Total Price: {currentCurrency === 'EUR' ? '€' : '$'} {totalPrice().toFixed(2)}</Text>
+                            <Button 
+                                mt={4} 
+                                variant="outline" 
+                                colorScheme="green"
+                                isLoading={loadingPurchase}
+                                onClick={onPurchase}
+                                >
+                                    Purchase Product
+                            </Button>
+                        </Flex>
                     </Flex>
-                </Flex>
-            </LaptopWrapper>
-        </Container>
+                </LaptopWrapper>
+            </Container>
+        </>
     )
 }
 

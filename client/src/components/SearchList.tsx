@@ -9,16 +9,19 @@ interface SearchMoviesData {
 
 interface SearchData {
     movies: SearchMoviesData[]
+    onAddData: (number_id: number) => void
 }
 
-export const SearchList: React.FC<SearchData & FlexProps> = ({movies, onClick}) => {
+
+export const SearchList: React.FC<SearchData & FlexProps> = ({movies, onAddData}) => {
+
 
     return (
         <>
             {movies.map(movie => {
                 var words = movie.overview.split('.')
                 return (
-                    <Flex _hover={{ cursor:"pointer", backgroundColor: "rgba(255, 193, 77, 0.7)"}} onClick={onClick} >
+                    <Flex _hover={{ cursor:"pointer", backgroundColor: "rgba(255, 193, 77, 0.7)"}} onClick={() => onAddData(movie.id)} >
                         <Flex key={movie.id * 4} mx={4} my={8} >
                             <Image src={movie.poster} width="100px" alt="poster" objectFit="cover" />
                             <Flex ml={4} flexDir="column" gridGap={4} >

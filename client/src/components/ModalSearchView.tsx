@@ -1,6 +1,6 @@
 import { Modal, ModalContent, ModalOverlay, useDisclosure } from "@chakra-ui/react"
 import React, { useState, useEffect } from "react"
-import { SearchMoviesQuery, useSearchMoviesLazyQuery } from "../generated/graphql"
+import { MeDocument, SearchMoviesQuery, useAdditemMutation, useSearchMoviesLazyQuery } from "../generated/graphql"
 import { useDebounce } from "../hooks/useDebounce"
 import { SearchInput } from "./SearchInput"
 import { SearchList } from "./SearchList"
@@ -22,9 +22,19 @@ export const ModalSearchView = () => {
         })
         setData(searchData)
     }, [debouncedSearch])
+
+    const [addItem] = useAdditemMutation()
     
-    const resetData = () => {
+    const onAddData = (movie_id: number) => {
         onClose()
+        addItem({
+            variables: {
+                movie_id
+            },
+            refetchQueries: [{
+                query: MeDocument
+            }]
+        })
         setData(undefined)
     }
 
@@ -32,7 +42,7 @@ export const ModalSearchView = () => {
         <>
             <SearchInput onClick={onOpen} />
 
-            <Modal isOpen={isOpen} onClose={resetData}>
+            <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent maxW="520px">
                     <SearchInput onChange={e => setSearch(e.target.value)} />
@@ -40,7 +50,7 @@ export const ModalSearchView = () => {
                     ? null
                     :  (
                         //@ts-ignore
-                        <SearchList movies={data.searchMovies} onClick={resetData} /> 
+                        <SearchList movies={data.searchMovies} onAddData={onAddData} /> 
                       )}
                 </ModalContent>
             </Modal>

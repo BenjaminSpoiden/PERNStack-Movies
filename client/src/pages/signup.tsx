@@ -9,6 +9,7 @@ import { Form, Formik } from "formik"
 import { ValidationSchema } from "../utils/ValidationSchema"
 import { MeDocument, MeQuery, useCreateUserMutation } from "../generated/graphql"
 import { toErrorMap } from "../utils/toErrorMap"
+import Head from "next/head"
 
 const Register = () => {
 
@@ -16,84 +17,89 @@ const Register = () => {
     const [createUserMutation] = useCreateUserMutation()
 
     return (
-        <Container minH="100vh">
-            <Flex minH="100vh" align="center" justifyContent="center" >
-                <CredentialBox w="480px" >
-                    <Heading>Register</Heading>
+        <>
+            <Head>
+                <title>Register</title>
+            </Head>
+            <Container minH="100vh">
+                <Flex minH="100vh" align="center" justifyContent="center" >
+                    <CredentialBox w="480px" >
+                        <Heading textColor="white">Register</Heading>
 
-                    <Formik
-                        initialValues={{
-                            username: "",
-                            email: "",
-                            password: ""
-                        }}
-                        onSubmit={async (values, {setErrors}) => {
-                            const response = createUserMutation({
-                                variables: {
-                                    input: values
-                                },
-                                update: (cache, {data}) => {
-                                    cache.writeQuery<MeQuery>({
-                                        query: MeDocument,
-                                        data: {
-                                            __typename: "Query",
-                                            me: data?.createUser.user
-                                        }
-                                    })
-                                }
-                            })
-
-                            return response 
-                                .then(result => {
-                                    if(result.data?.createUser.errors) {
-                                        setErrors(toErrorMap(result.data.createUser.errors))
-                                    }else if(result.data?.createUser.user) {
-                                        router.push("/")
+                        <Formik
+                            initialValues={{
+                                username: "",
+                                email: "",
+                                password: ""
+                            }}
+                            onSubmit={async (values, {setErrors}) => {
+                                const response = createUserMutation({
+                                    variables: {
+                                        input: values
+                                    },
+                                    update: (cache, {data}) => {
+                                        cache.writeQuery<MeQuery>({
+                                            query: MeDocument,
+                                            data: {
+                                                __typename: "Query",
+                                                me: data?.createUser.user
+                                            }
+                                        })
                                     }
                                 })
-                        }}
-                        validationSchema={ValidationSchema}
-                    >
-                        {({isSubmitting, handleBlur, handleChange, isValid}) => {
 
-                            return (
-                                <Form>
-                                    <CustomInput 
-                                        name="username"
-                                        placeholder="Enter your username"
-                                        type="text"
-                                        icon={<BiUser />}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                    />
-                                    <CustomInput
-                                        name="email"
-                                        placeholder="Enter your email"
-                                        type="email"
-                                        icon={<FiMail />}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                    />
-                                    <CustomInput
-                                        name="password"
-                                        placeholder="Enter your password"
-                                        type="password"
-                                        icon={<BiLock />}
-                                        helpertext="Enter atleast 8 characters."
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
+                                return response 
+                                    .then(result => {
+                                        if(result.data?.createUser.errors) {
+                                            setErrors(toErrorMap(result.data.createUser.errors))
+                                        }else if(result.data?.createUser.user) {
+                                            router.push("/")
+                                        }
+                                    })
+                            }}
+                            validationSchema={ValidationSchema}
+                        >
+                            {({isSubmitting, handleBlur, handleChange, isValid}) => {
 
-                                    />
-                                    <Button d="flex" w="100%" colorScheme="orange" my={4} disabled={!isValid} isLoading={isSubmitting} type="submit" >
-                                        Login
-                                    </Button>
-                                </Form>
-                            )}}
-                    </Formik>
-                    <Link onClick={() => router.replace("/login")} ><Text fontStyle="italic" fontSize="sm" >Already have an account ? Login now</Text></Link>
-                </CredentialBox>
-            </Flex>
-        </Container>
+                                return (
+                                    <Form>
+                                        <CustomInput 
+                                            name="username"
+                                            placeholder="Enter your username"
+                                            type="text"
+                                            icon={<BiUser />}
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                        />
+                                        <CustomInput
+                                            name="email"
+                                            placeholder="Enter your email"
+                                            type="email"
+                                            icon={<FiMail />}
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                        />
+                                        <CustomInput
+                                            name="password"
+                                            placeholder="Enter your password"
+                                            type="password"
+                                            icon={<BiLock />}
+                                            helpertext="Enter atleast 8 characters."
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+
+                                        />
+                                        <Button d="flex" w="100%" colorScheme="orange" my={4} disabled={!isValid} isLoading={isSubmitting} type="submit" >
+                                            Login
+                                        </Button>
+                                    </Form>
+                                )}}
+                        </Formik>
+                        <Link onClick={() => router.replace("/login")} ><Text fontStyle="italic" fontSize="sm" >Already have an account ? Login now</Text></Link>
+                    </CredentialBox>
+                </Flex>
+            </Container>
+        </>
     )
 }
 
