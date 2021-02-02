@@ -17,19 +17,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({updateChanges}) => {
     const buttonRef = useRef()
 
     
-    const {genreData, selectedGenres, setSelectGenres} = useGenres()
-
-    // const updateChanges = (e: React.ChangeEvent<HTMLInputElement>, genreId: number) => {
-    //     if(e.target.checked) {
-    //         setSelectGenres({
-    //             genres: selectedGenres?.genres.concat(genreId)
-    //         })
-    //     }else {
-    //         setSelectGenres({
-    //             genres: selectedGenres?.genres.filter(val => val !== genreId)
-    //         })
-    //     }
-    // }
+    const { genreData, selectedGenres } = useGenres()
 
     console.log(selectedGenres)
     

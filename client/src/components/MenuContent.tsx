@@ -19,12 +19,7 @@ export const MenuContent: React.FC<StackProps> = (props) => {
                 ? 
                     <HStack {...props} >
                         <Text d={["none", "none", "flex"]} >Welcome, {me.username}</Text>
-                        <IconButton 
-                            aria-label="settings"
-                            fontSize="20px"
-                            colorScheme="gray"
-                            children={<SettingsIcon />}
-                        />
+                        
                         <NextLink href="/cart/[id]" as={`/cart/${me.id}`} >
                             <Badge count={me.movieItems?.length} style={{backgroundColor: "orange"}} >
                                 <IconButton
