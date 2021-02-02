@@ -1,9 +1,8 @@
 import { useQuery } from "@apollo/client"
 import { CalendarIcon, StarIcon } from "@chakra-ui/icons"
-import { Flex, Text, Heading, Image, Icon, IconButton, Wrap, WrapItem, Button } from "@chakra-ui/react"
-import React, { useState } from "react"
+import { Flex, Text, Heading, Image, Icon,  Wrap, WrapItem, Button } from "@chakra-ui/react"
+import React from "react"
 import { BiCart } from "react-icons/bi"
-import {MdFavorite, MdFavoriteBorder } from "react-icons/md"
 import { QUERY_CURRENCY } from "../apollo/queries"
 import { MeDocument, Movie, useAdditemMutation } from "../generated/graphql"
 import { useAuth } from "../hooks/useAuth"
@@ -19,7 +18,6 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
   
     const currentCurrency = currencyQueryResult.data.currency.currentCurrency
     
-    const [fav, setFav] = useState(movieData.wish_list)
 
     const {me} = useAuth()
 
@@ -31,17 +29,7 @@ export const MovieDisplay: React.FC<MovieData> = ({movieData}) => {
             <Flex flexDir="column" m={4} w={["auto", "100%"]} >
                 <Flex align="center" justify="space-between">
                     <Heading size="md" textColor="white" >{movieData.original_title}</Heading>
-                    <IconButton
-                        onClick={() => {
-                            setFav(c => !c)
-                        }}
-                        disabled={!me}
-                        color="red.600"
-                        variant="ghost"
-                        aria-label="fav"
-                        fontSize="24px"
-                        icon={ fav ? <MdFavorite /> : <MdFavoriteBorder />}
-                    />
+                   
                 </Flex>
                 <Flex flexDir={['column', 'column', 'row']} align={["flex-start", "flex-start", "center"]} justify="space-between">
                     <Flex align="center" >

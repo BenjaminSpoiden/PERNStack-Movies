@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client"
-import { Divider, Flex, SimpleGrid, Text, Button, useToast } from "@chakra-ui/react"
+import { Divider, Flex, SimpleGrid, Text, Button, useToast, Center } from "@chakra-ui/react"
 import { useRouter } from "next/dist/client/router"
 import Head from "next/head"
 import React from "react"
@@ -67,13 +67,16 @@ const Cart = () => {
                 <LaptopWrapper>
                     <Flex mt="100px" maxW="1280px" align="center" flexDir="column" p={4}>
                         <SimpleGrid maxW="768px" w="100%" spacing={4} >
-                            {data.me.movieItems?.map(item => (
+                            {data.me.movieItems ? data.me.movieItems.map(item => (
                                 <CartItem 
                                     key={item.id} 
                                     movieItem={item} 
                                     currentCurrency={currentCurrency}
                                 />
-                            ))}
+                            )) :
+                                <Center>
+                                    <Text fontStyle="italic" >No items in your cart yet</Text>
+                                </Center>}
                         </SimpleGrid>
                         <Flex flexDir="column" align="flex-end" maxW="768px" w="100%" >
                             <Divider w="250px" my={4}/>
@@ -82,6 +85,7 @@ const Cart = () => {
                                 mt={4} 
                                 variant="outline" 
                                 colorScheme="green"
+                                disabled={!data.me.movieItems}
                                 isLoading={loadingPurchase}
                                 onClick={onPurchase}
                                 >

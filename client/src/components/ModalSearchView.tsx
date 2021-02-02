@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalOverlay, useDisclosure } from "@chakra-ui/react"
+import { Box, Modal, ModalContent, ModalOverlay, useDisclosure } from "@chakra-ui/react"
 import React, { useState, useEffect } from "react"
 import { MeDocument, SearchMoviesQuery, useAdditemMutation, useSearchMoviesLazyQuery } from "../generated/graphql"
 import { useDebounce } from "../hooks/useDebounce"
@@ -39,12 +39,12 @@ export const ModalSearchView = () => {
     }
 
     return (
-        <>
+        <Box d={["none", "none", "flex", "flex"]}  >
             <SearchInput onClick={onOpen} />
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent maxW="520px">
+                <ModalContent w="420px">
                     <SearchInput onChange={e => setSearch(e.target.value)} />
                     {!data
                     ? null
@@ -54,6 +54,6 @@ export const ModalSearchView = () => {
                       )}
                 </ModalContent>
             </Modal>
-        </>
+        </Box>
     )
 }

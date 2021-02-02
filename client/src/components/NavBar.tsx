@@ -1,20 +1,14 @@
-import { Button, Flex, HStack, IconButton, Text } from "@chakra-ui/react"
+import { Flex, Text} from "@chakra-ui/react"
 import React from "react"
-import NextLink from "next/link"
-import { useAuth } from "../hooks/useAuth"
-import { FiLogOut } from "react-icons/fi"
-import { MeDocument, MeQuery, useLogoutUserMutation } from "../generated/graphql"
-import { SettingsIcon } from "@chakra-ui/icons"
-import { BiCart } from "react-icons/bi"
 import { ModalSearchView } from "./ModalSearchView"
-import { CurrencySwitch } from "./CurrencySwitch"
-import Badge from "antd/lib/badge"
+import { SideMenu } from "./SideMenu"
+import { MenuContent } from "./MenuContent"
 
-export const NavBar = () => {
+interface NavBarProps {
+    updateChanges: (e: React.ChangeEvent<HTMLInputElement>, genreId: number) => void
+}
 
-    const { me, loading } = useAuth()
-    const [logoutUser] = useLogoutUserMutation()
-    
+export const NavBar: React.FC<NavBarProps> = ({updateChanges}) => {
 
     return (
         <Flex 
@@ -31,62 +25,9 @@ export const NavBar = () => {
                 <Text>
                     Some App Name
                 </Text>
-               <ModalSearchView />
-                {me && !loading
-                    ? 
-                        <HStack>
-                            <Text>Welcome, {me.username}</Text>
-                            <IconButton 
-                                aria-label="settings"
-                                fontSize="20px"
-                                colorScheme="gray"
-                                children={<SettingsIcon />}
-                            />
-                            <NextLink href="/cart/[id]" as={`/cart/${me.id}`} >
-                                <Badge count={me.movieItems?.length} style={{backgroundColor: "orange"}} >
-                                    <IconButton
-                                        aria-label="cart"
-                                        fontSize="28px"
-                                        colorScheme="orange"
-                                        children={<BiCart />}
-                                    />
-                                </Badge>
-                            </NextLink>
-                            <CurrencySwitch aria-label="currency-switch"/>
-                            <IconButton 
-                                aria-label="sign-out" 
-                                variant="outline"
-                                fontSize="20px"
-                                colorScheme="red"
-                                children={<FiLogOut />}
-                                onClick={async () => await logoutUser({
-                                    update: (cache) => {
-                                        cache.writeQuery<MeQuery>({
-                                            query: MeDocument,
-                                            data: {
-                                                __typename: "Query",
-                                                me: null
-                                            }
-                                        })
-                                    }
-                                })}
-                            />
-                        </HStack>
-                    :
-                        <HStack>
-                            <NextLink href="/login" passHref >
-                                <Button colorScheme="gray" >
-                                    Sign in
-                                </Button>
-                            </NextLink>
-                            <NextLink href="/signup" passHref >
-                                <Button colorScheme="orange" >
-                                    Register
-                                </Button>
-                            </NextLink>
-                            <CurrencySwitch aria-label="currency-switch"/>
-                        </HStack>
-                }
+                <ModalSearchView />
+                <MenuContent d={["none", "none", "flex"]} />
+                <SideMenu updateChanges={updateChanges} />
             </Flex> 
         </Flex>
     )

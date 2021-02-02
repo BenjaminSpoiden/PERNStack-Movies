@@ -1,6 +1,7 @@
 import { Button, Flex, SimpleGrid } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useFetchMoviesQuery } from "../generated/graphql"
+import { useGenres } from "../hooks/useGenres"
 import { MovieDisplay } from "./MovieDisplay"
 
 interface MoviesProps {
@@ -11,6 +12,7 @@ interface MoviesProps {
 
 export const Movies = ({selectedGenres}: MoviesProps) => {
 
+    
     const [paginateLoading, setPaginateLoading] = useState(false)
     const {data, fetchMore, variables} = useFetchMoviesQuery({
       variables: {
