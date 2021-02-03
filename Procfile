@@ -1,1 +1,1 @@
-web:nodemon/dist/index.js
+web:ts-node/dist/index.js
