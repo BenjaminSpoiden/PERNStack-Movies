@@ -34,6 +34,7 @@
     "typeorm": "^0.2.30",
     "yup": "^0.32.8"
   },
+  
   "devDependencies": {
     "@types/connect-redis": "^0.0.16",
     "@types/cors": "^2.8.9",
