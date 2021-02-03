@@ -63,6 +63,7 @@ const Cart = () => {
                 <title>Cart</title>
             </Head>
             <Container minH="100vh">
+                {/* @ts-ignore */}
                 <NavBar />
                 <LaptopWrapper>
                     <Flex mt="100px" maxW="1280px" align="center" flexDir="column" p={4}>

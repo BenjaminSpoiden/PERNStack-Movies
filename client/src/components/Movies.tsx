@@ -1,7 +1,6 @@
 import { Button, Flex, SimpleGrid } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useFetchMoviesQuery } from "../generated/graphql"
-import { useGenres } from "../hooks/useGenres"
 import { MovieDisplay } from "./MovieDisplay"
 
 interface MoviesProps {

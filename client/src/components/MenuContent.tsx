@@ -1,4 +1,3 @@
-import { SettingsIcon } from "@chakra-ui/icons"
 import { HStack, IconButton, Button, Text, StackProps } from "@chakra-ui/react"
 import React from "react"
 import { BiCart } from "react-icons/bi"
