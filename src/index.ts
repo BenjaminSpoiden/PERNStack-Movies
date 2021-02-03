@@ -19,6 +19,8 @@ import { createGenreLoader } from "./utils/MovieLoader"
 import { createCartLoader } from "./utils/CartLoader"
 import { CartResolver } from "./resolvers/CartResolver"
 
+const APP_PROD = PROD || 3000
+
 const initServer = async() => {
 
     const app = express()
@@ -79,8 +81,8 @@ const initServer = async() => {
         res.send("Hello server")
     })
 
-    await app.listen(PORT, () => {
-        console.log(`🚀 Server ready at http://localhost:${PORT}`)
+    await app.listen(APP_PROD, () => {
+        console.log(`🚀 Server ready at http://localhost:${APP_PROD}`)
     })
 }
 
