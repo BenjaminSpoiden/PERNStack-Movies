@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node dist/index.js",
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
@@ -12,7 +12,8 @@
     "typeorm:create": "typeorm migration:create -n",
     "gen": "typeorm migration:generate -n",
     "revert": "typeorm migration:revert",
-    "show": "typeorm migration:show"
+    "show": "typeorm migration:show",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
   "dependencies": {
     "apollo-server-express": "^2.19.2",
@@ -34,7 +35,7 @@
     "typeorm": "^0.2.30",
     "yup": "^0.32.8"
   },
-  
+
   "devDependencies": {
     "@types/connect-redis": "^0.0.16",
     "@types/cors": "^2.8.9",
